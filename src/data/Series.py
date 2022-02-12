@@ -1,9 +1,9 @@
 class Series:
 
-    def __init__(self, series_idx, name, description):
-        self.series_idx = series_idx
+    def __init__(self, idx, name, description):
+        self.idx = idx
         self.name = name
         self.description = description
 
     def __str__(self):
-        return 'Series({}, {}, {})'.format(self.series_idx, self.name, self.description)
+        return 'Series({}, {}, {})'.format(self.idx, self.name, self.description)
