@@ -1,8 +1,7 @@
 from typing import List
 
-from src.data.Ingredient import Ingredient
-from src.data.Series import Series
-from src.repository.SQLUtil import SQLUtil
+from analysis.src.data.Series import Series
+from analysis.src.repository.SQLUtil import SQLUtil
 
 
 def get_series_all() -> List[Series]:
@@ -18,7 +17,7 @@ def main():
     import os
 
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    load_dotenv(dotenv_path=os.path.join(BASE_DIR, '../../.env'), verbose=True)
+    load_dotenv(dotenv_path=os.path.join(BASE_DIR, '../../../.env'), verbose=True)
 
     SQLUtil.instance().logging = True
 

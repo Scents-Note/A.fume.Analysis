@@ -1,5 +1,5 @@
 from api.src.data.Brand import Brand
-from src.repository.SQLUtil import SQLUtil
+from analysis.src.repository.SQLUtil import SQLUtil
 
 
 def update_brand(brand):

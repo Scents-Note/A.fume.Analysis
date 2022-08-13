@@ -1,7 +1,7 @@
 from typing import List
 
-from src.data.Ingredient import Ingredient
-from src.repository.SQLUtil import SQLUtil
+from analysis.src.data.Ingredient import Ingredient
+from analysis.src.repository.SQLUtil import SQLUtil
 
 
 def get_ingredient_list(ingredient_idx_list) -> List[Ingredient]:
@@ -19,7 +19,7 @@ def main():
     import os
 
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    load_dotenv(dotenv_path=os.path.join(BASE_DIR, '../../.env'), verbose=True)
+    load_dotenv(dotenv_path=os.path.join(BASE_DIR, '../../../.env'), verbose=True)
 
     SQLUtil.instance().logging = True
 

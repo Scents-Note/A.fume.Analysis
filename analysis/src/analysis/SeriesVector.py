@@ -1,7 +1,7 @@
 import pandas as pd
 
-from src.data.Note import Note
-from src.repository import PerfumeRepository, NoteRepository, IngredientRepository, SeriesRepository
+from analysis.src.data.Note import Note
+from analysis.src.repository import NoteRepository, IngredientRepository, PerfumeRepository, SeriesRepository
 
 PERFUME_IDX = 'perfume_idx'
 PERFUME_NAME = '향수 이름'
