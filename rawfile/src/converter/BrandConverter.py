@@ -1,4 +1,4 @@
-from rawfile.Config import Config
+from rawfile.src.Config import Config
 from api.src.data.Brand import Brand
 from api.src.repository.BrandRepository import update_brand
 from api.src.repository.SQLUtil import SQLUtil

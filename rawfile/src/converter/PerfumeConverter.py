@@ -1,15 +1,15 @@
-from rawfile.Config import Config
-from src.common.data.Note import Note
-from src.common.data.Perfume import Perfume
-from src.common.data.PerfumeDefaultReview import PerfumeDefaultReview
-from src.common.repository import KeywordRepository
-from src.common.repository.IngredientRepository import get_ingredient_idx_by_name
-from src.common.repository.KeywordRepository import get_keywords_by_idx_list
-from src.common.repository.NoteRepository import update_note_list
-from src.common.repository.PerfumeRepository import update_perfume_default_review, update_perfume
-from src.common.repository.SQLUtil import SQLUtil
-from src.common.util.ExcelParser import ExcelColumn, ExcelParser
-from src.converter.Converter import Converter
+from rawfile.src.Config import Config
+from api.src.data.Note import Note
+from api.src.data.Perfume import Perfume
+from api.src.data.PerfumeDefaultReview import PerfumeDefaultReview
+from api.src.repository import KeywordRepository
+from api.src.repository.IngredientRepository import get_ingredient_idx_by_name
+from api.src.repository.KeywordRepository import get_keywords_by_idx_list
+from api.src.repository.NoteRepository import update_note_list
+from api.src.repository.PerfumeRepository import update_perfume_default_review, update_perfume
+from api.src.repository.SQLUtil import SQLUtil
+from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
+from rawfile.src.converter.Converter import Converter
 
 
 class PerfumeConverter(Converter):

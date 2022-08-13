@@ -12,7 +12,7 @@ def getenvNonNull(key) -> any:
 class Config:
 
     def __init__(self):
-        load_dotenv(dotenv_path='../.env')
+        load_dotenv(dotenv_path='../../.env')
 
         self.MYSQL_USER = getenvNonNull('MYSQL_USER')
         self.MYSQL_PASSWD = getenvNonNull('MYSQL_PASSWD')

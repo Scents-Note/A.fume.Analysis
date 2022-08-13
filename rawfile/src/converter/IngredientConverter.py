@@ -1,10 +1,10 @@
-from rawfile.Config import Config
-from src.common.data.Ingredient import Ingredient
-from src.common.repository.IngredientCategoryRepository import get_category_idx_by_name
-from src.common.repository.IngredientRepository import update_ingredient
-from src.common.repository.SQLUtil import SQLUtil
-from src.common.util.ExcelParser import ExcelColumn, ExcelParser
-from src.converter.Converter import Converter
+from rawfile.src.Config import Config
+from api.src.data.Ingredient import Ingredient
+from api.src.repository.IngredientCategoryRepository import get_category_idx_by_name
+from api.src.repository.IngredientRepository import update_ingredient
+from api.src.repository.SQLUtil import SQLUtil
+from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
+from rawfile.src.converter.Converter import Converter
 
 
 class IngredientConverter(Converter):

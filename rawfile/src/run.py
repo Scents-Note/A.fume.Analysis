@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from typing import Dict
 
-from rawfile.Config import Config
+from rawfile.src.Config import Config
 from common.Strings import CommandInfo, CommandStr
 from converter.BrandConverter import BrandConverter
 from converter.Converter import Converter

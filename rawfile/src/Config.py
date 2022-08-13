@@ -15,7 +15,7 @@ class Config:
 
     def __init__(self):
         import os
-        load_dotenv(dotenv_path='../.env')
+        load_dotenv(dotenv_path='../../.env')
 
         self.INPUT_DIR_PATH = os.getenv('INPUT_DIR_PATH') or './input'
         self.OUTPUT_DIR_PATH = os.getenv('OUTPUT_DIR_PATH') or './output'

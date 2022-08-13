@@ -1,9 +1,9 @@
-from rawfile.Config import Config
-from src.common.data.Series import Series
-from src.common.repository.SQLUtil import SQLUtil
-from src.common.repository.SeriesRepository import update_series
-from src.common.util.ExcelParser import ExcelColumn, ExcelParser
-from src.converter.Converter import Converter
+from rawfile.src.Config import Config
+from api.src.data.Series import Series
+from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository.SeriesRepository import update_series
+from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
+from rawfile.src.converter.Converter import Converter
 
 
 class SeriesConverter(Converter):
