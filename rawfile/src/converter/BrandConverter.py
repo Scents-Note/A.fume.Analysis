@@ -1,9 +1,9 @@
-from rawfile.src.Config import Config
+from api.src.Config import Config
 from api.src.data.Brand import Brand
 from api.src.repository.BrandRepository import update_brand
 from api.src.repository.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
-from Converter import Converter
+from rawfile.src.converter.Converter import Converter
 
 
 class BrandConverter(Converter):

@@ -1,4 +1,4 @@
-from rawfile.src.Config import Config
+from api.src.Config import Config
 from api.src.data.Ingredient import Ingredient
 from api.src.repository.IngredientCategoryRepository import get_category_idx_by_name
 from api.src.repository.IngredientRepository import update_ingredient

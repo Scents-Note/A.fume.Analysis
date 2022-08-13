@@ -1,4 +1,4 @@
-from SQLUtil import SQLUtil
+from analysis.src.repository.SQLUtil import SQLUtil
 
 
 def get_category_idx_by_name(name):

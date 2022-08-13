@@ -1,4 +1,4 @@
-from rawfile.src.Config import Config
+from api.src.Config import Config
 from api.src.data.Note import Note
 from api.src.data.Perfume import Perfume
 from api.src.data.PerfumeDefaultReview import PerfumeDefaultReview

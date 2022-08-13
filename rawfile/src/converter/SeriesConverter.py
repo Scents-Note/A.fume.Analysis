@@ -1,4 +1,4 @@
-from rawfile.src.Config import Config
+from api.src.Config import Config
 from api.src.data.Series import Series
 from api.src.repository.SQLUtil import SQLUtil
 from api.src.repository.SeriesRepository import update_series
