@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-from src.common.Strings import CommandInfo
+from rawfile.src.common.Strings import CommandInfo
 
 
 def getenvNonNull(key) -> any:
@@ -11,14 +11,21 @@ def getenvNonNull(key) -> any:
     return x
 
 
+def getEnv(key: str, default_value: any) -> any:
+    x = os.getenv(key)
+    if x is None:
+        return default_value
+    return x
+
+
 class Config:
 
     def __init__(self):
         import os
-        load_dotenv(dotenv_path='../../.env')
+        load_dotenv(dotenv_path=getEnv('ENV_PATH', '../../.env'))
 
         self.INPUT_DIR_PATH = os.getenv('INPUT_DIR_PATH') or './input'
-        self.OUTPUT_DIR_PATH = os.getenv('OUTPUT_DIR_PATH') or './output'
+        self.OUTPUT_DIR_PATH = os.getenv('OUTPUT_DIR_PATH') or './../output'
         self.DEBUG = os.getenv('DEBUG').lower() == 'true'
         self.TARGET = os.getenv('TARGET') or '*'
         self.COMMAND = getenvNonNull('COMMAND')

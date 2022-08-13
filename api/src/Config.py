@@ -2,17 +2,24 @@ import os
 from dotenv import load_dotenv
 
 
-def getenvNonNull(key) -> any:
+def getenvNonNull(key: str) -> any:
     x = os.getenv(key)
     if x is None:
         raise RuntimeError('{} must be not null'.format(key))
     return x
 
 
+def getEnv(key: str, default_value: any) -> any:
+    x = os.getenv(key)
+    if x is None:
+        return default_value
+    return x
+
+
 class Config:
 
     def __init__(self):
-        load_dotenv(dotenv_path='../../.env')
+        load_dotenv(dotenv_path=getEnv('ENV_PATH', '../../.env'))
 
         self.MYSQL_USER = getenvNonNull('MYSQL_USER')
         self.MYSQL_PASSWD = getenvNonNull('MYSQL_PASSWD')
