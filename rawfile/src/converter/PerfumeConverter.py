@@ -2,12 +2,12 @@ from api.src.Config import Config
 from api.src.data.Note import Note
 from api.src.data.Perfume import Perfume
 from api.src.data.PerfumeDefaultReview import PerfumeDefaultReview
-from api.src.repository import KeywordRepository
-from api.src.repository.IngredientRepository import get_ingredient_idx_by_name
-from api.src.repository.KeywordRepository import get_keywords_by_idx_list
-from api.src.repository.NoteRepository import update_note_list
-from api.src.repository.PerfumeRepository import update_perfume_default_review, update_perfume
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy import KeywordRepository
+from api.src.repository_legacy.IngredientRepository import get_ingredient_idx_by_name
+from api.src.repository_legacy.KeywordRepository import get_keywords_by_idx_list
+from api.src.repository_legacy.NoteRepository import update_note_list
+from api.src.repository_legacy.PerfumeRepository import update_perfume_default_review, update_perfume
+from api.src.repository_legacy.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 

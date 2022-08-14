@@ -1,5 +1,5 @@
 from api.src.data.Ingredient import Ingredient
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 def get_ingredient_idx_by_name(name):

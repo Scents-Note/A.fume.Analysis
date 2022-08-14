@@ -1,5 +1,5 @@
 from api.src.data.Note import Note
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 def get_note_list_by_perfume_idx(perfume_idx, note_type):

@@ -1,6 +1,6 @@
 from api.src.data.Perfume import Perfume
 from api.src.data.PerfumeDefaultReview import PerfumeDefaultReview
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 def update_perfume(perfume):

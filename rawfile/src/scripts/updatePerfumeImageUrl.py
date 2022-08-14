@@ -1,6 +1,6 @@
 from api.src.data.Perfume import Perfume
-from api.src.repository.PerfumeRepository import update_perfume
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.PerfumeRepository import update_perfume
+from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 def main(perfume_idx_list):

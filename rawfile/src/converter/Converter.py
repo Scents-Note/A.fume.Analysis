@@ -6,7 +6,7 @@ import pandas as pd
 
 from rawfile.src.Config import Config
 from rawfile.src.common.Strings import CommandStr
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 class Converter(metaclass=ABCMeta):

@@ -1,8 +1,8 @@
 from api.src.Config import Config
 from api.src.data.Ingredient import Ingredient
-from api.src.repository.IngredientCategoryRepository import get_category_idx_by_name
-from api.src.repository.IngredientRepository import update_ingredient
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.IngredientCategoryRepository import get_category_idx_by_name
+from api.src.repository_legacy.IngredientRepository import update_ingredient
+from api.src.repository_legacy.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 

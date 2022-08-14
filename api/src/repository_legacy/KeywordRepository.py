@@ -1,4 +1,4 @@
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 def get_keyword_idx_by_name(name):

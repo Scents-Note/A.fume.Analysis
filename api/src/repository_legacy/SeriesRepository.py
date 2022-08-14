@@ -1,5 +1,5 @@
 from api.src.data.Series import Series
-from api.src.repository.SQLUtil import SQLUtil
+from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 def update_series(series: Series):
