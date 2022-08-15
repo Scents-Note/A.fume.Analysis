@@ -13,13 +13,16 @@ class SeriesConverter(Converter):
         self.parser = None
 
     def get_data_list(self):
-        SQLUtil.instance().execute(
-            sql="SELECT s.series_idx AS {}, s.name AS {}, s.english_name AS {}, s.description AS {}, "
-                "s.image_url AS {} FROM series AS s"
-            .format(ExcelColumn.COL_IDX, ExcelColumn.COL_NAME, ExcelColumn.COL_ENGLISH_NAME,
-                    ExcelColumn.COL_DESCRIPTION, ExcelColumn.COL_IMAGE_URL))
-
-        return SQLUtil.instance().fetchall()
+        return [
+            {
+                ExcelColumn.COL_IDX: it.series_idx,
+                ExcelColumn.COL_NAME: it.name,
+                ExcelColumn.COL_ENGLISH_NAME: it.english_name,
+                ExcelColumn.COL_DESCRIPTION: it.description,
+                ExcelColumn.COL_IMAGE_URL: it.image_url
+            }
+            for it in series_model.read_all()
+        ]
 
     def prepare_parser(self, columns_list):
         self.parser = ExcelParser(columns_list, {
@@ -28,10 +31,7 @@ class SeriesConverter(Converter):
             'english_name': ExcelColumn.COL_ENGLISH_NAME,
             'image_url': ExcelColumn.COL_IMAGE_URL,
             'description': ExcelColumn.COL_DESCRIPTION
-        }, lambda result_json: SeriesEntity(series_idx=result_json['series_idx'], name=result_json['name'],
-                                            english_name=result_json['english_name'],
-                                            image_url=result_json['image_url'],
-                                            description=result_json['description']))
+        }, lambda it: SeriesEntity.create(it))
 
     def read_line(self, row):
         series = self.parser.parse(row)

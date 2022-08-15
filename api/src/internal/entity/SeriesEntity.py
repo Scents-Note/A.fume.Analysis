@@ -6,3 +6,10 @@ class SeriesEntity:
         self.english_name = english_name
         self.description = description
         self.image_url = image_url
+
+    @staticmethod
+    def create(it: dict):
+        return SeriesEntity(series_idx=it['series_idx'], name=it['name'],
+                            english_name=it['english_name'],
+                            image_url=it['image_url'],
+                            description=it['description'])

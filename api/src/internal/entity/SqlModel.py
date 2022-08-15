@@ -2,10 +2,18 @@ import abc
 
 from api.src.Config import Config
 from api.src.common.Object import Singleton
+from api.src.internal.entity.BrandEntity import BrandEntity
+from api.src.internal.entity.SeriesEntity import SeriesEntity
 from api.src.internal.sql.SQLUtil import SQLUtil
 
 
 class SqlModel(Singleton, abc.ABC):
+
+    def read_all(self) -> [any]:
+        sql = "SELECT * FROM {}".format(self.get_table_name())
+        SQLUtil.instance().execute(sql=sql)
+
+        return SQLUtil.instance().fetchall()
 
     def create(self, data: dict):
         update_query, update_values = self.__generate_update_condition(data)
@@ -32,6 +40,8 @@ class SqlModel(Singleton, abc.ABC):
         if Config.instance().READ_ONLY:
             raise "Because current is READ_ONLY mode, so it can't delete query"
         update_query, update_values = self.__generate_update_condition(data)
+        if len(update_values) == 0:
+            return
         primary_key_query, primary_key_values = self.__generate_primary_key_condition(data)
 
         sql_query = 'UPDATE {} SET {} WHERE {}'.format(self.get_table_name(), update_query,
@@ -60,10 +70,10 @@ class SqlModel(Singleton, abc.ABC):
     def __get_ids(self) -> [int]:
         return [self.__dict__[pk] for pk in self.get_primary_keys()]
 
-    def __generate_update_condition(self, dic: dict) -> (str, [any]):
-        keys = filter(lambda key: key not in self.get_primary_keys() and dic[key] is not None, dic.keys())
-        condition_str = ', '.join(['{} = {}'.format(key, '%d' if dic[key].isnumeric() else '%s') for key in keys])
-        value_list = [dic[key] for key in keys]
+    def __generate_update_condition(self, data: dict) -> (str, [any]):
+        keys = filter(lambda key: key not in self.get_primary_keys() and data[key] is not None, data.keys())
+        condition_str = ', '.join(['{} = {}'.format(key, '%d' if isinstance(data[key], int) else '%s') for key in keys])
+        value_list = [data[key] for key in keys]
         return condition_str, value_list
 
     def __generate_primary_key_condition(self, dic: dict) -> (str, [any]):
@@ -75,6 +85,10 @@ class SqlModel(Singleton, abc.ABC):
 
 class BrandModel(SqlModel):
 
+    def read_all(self) -> [BrandEntity]:
+        result = super().read_all()
+        return [BrandEntity.create(row) for row in result]
+
     def get_table_name(self) -> str:
         return 'brands'
 
@@ -83,6 +97,10 @@ class BrandModel(SqlModel):
 
 
 class SeriesModel(SqlModel):
+
+    def read_all(self) -> [SeriesEntity]:
+        result = super().read_all()
+        return [SeriesEntity.create(row) for row in result]
 
     def get_primary_keys(self) -> [str]:
         return ['series_idx']
