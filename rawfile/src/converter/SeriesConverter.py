@@ -1,6 +1,6 @@
 from api.src.Config import Config
 from api.src.internal.entity.SeriesEntity import SeriesEntity
-from api.src.internal.CrudRepository import CrudRepository
+from api.src.internal.entity.SqlModel import series_model
 from api.src.internal.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
@@ -35,4 +35,4 @@ class SeriesConverter(Converter):
 
     def read_line(self, row):
         series = self.parser.parse(row)
-        CrudRepository.update(series)
+        series_model.update(series.__dict__)

@@ -1,7 +1,8 @@
 from typing import List
 
 from api.src.data.Note import Note
-from api.src.internal.CrudRepository import CrudRepository
+
+from api.src.internal.entity.SqlModel import NoteModel, note_model
 from api.src.internal.sql.SQLUtil import SQLUtil
 
 
@@ -32,8 +33,8 @@ class NoteRepository:
         added_set = note_set.difference(db_set)
         removed_set = db_set.difference(note_set)
 
-        [CrudRepository.create(note) for note in added_set]
-        [CrudRepository.delete(note) for note in removed_set]
+        [note_model.create(note.__dict__) for note in added_set]
+        [note_model.delete(note.__dict__) for note in removed_set]
 
     @staticmethod
     def get_note_list_by_perfume_idx_and_note(perfume_idx: int, note_type: int = None) -> List[Note]:

@@ -1,6 +1,6 @@
 from api.src.Config import Config
 from api.src.internal.entity.IngredientEntity import IngredientEntity
-from api.src.internal.CrudRepository import CrudRepository
+from api.src.internal.entity.SqlModel import ingredient_model
 from api.src.repository.IngredientRepository import IngredientRepository
 from api.src.internal.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
@@ -47,4 +47,4 @@ class IngredientConverter(Converter):
 
     def read_line(self, row):
         ingredient = self.parser.parse(row)
-        CrudRepository.update(ingredient)
+        ingredient_model.update(ingredient.__dict__)

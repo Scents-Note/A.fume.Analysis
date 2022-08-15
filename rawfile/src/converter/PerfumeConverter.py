@@ -1,7 +1,7 @@
 from api.src.Config import Config
-from api.src.internal.CrudRepository import CrudRepository
 from api.src.internal.entity.NoteEntity import NoteEntity
 from api.src.internal.entity.PerfumeEntity import PerfumeEntity
+from api.src.internal.entity.SqlModel import perfume_model
 from api.src.repository.IngredientRepository import IngredientRepository
 from api.src.repository.NoteRepository import NoteRepository
 from api.src.internal.sql.SQLUtil import SQLUtil
@@ -129,7 +129,7 @@ class PerfumeConverter(Converter):
         def doTaskNoteList(json) -> dict:
             perfume_idx = json['perfume_idx']
 
-            def parse_note_str(note_str: str, note_type: int) -> [Note]:
+            def parse_note_str(note_str: str, note_type: int) -> [NoteEntity]:
                 if note_str is None:
                     return None
 
@@ -169,7 +169,7 @@ class PerfumeConverter(Converter):
 
     def read_line(self, row):
         perfume = self.perfume_parser.parse(row)
-        CrudRepository.update(perfume)
+        perfume_model.update(perfume.__dict__)
 
         note_dict = self.note_parser.parse(row)
         for note_type, note_list in note_dict.items():
