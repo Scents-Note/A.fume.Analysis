@@ -37,7 +37,7 @@ class IngredientRepository:
 
         SQLUtil.instance().execute(sql=sql)
         return [Ingredient(idx=it['ingredient_idx'], series_idx=it['series_idx'], name=it['name'],
-                           english_name=it['english_name'], description=it['description'],
+                           description=it['description'],
                            image_url=it['image_url'])
                 for it in SQLUtil.instance().fetchall()]
 
