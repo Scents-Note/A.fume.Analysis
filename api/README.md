@@ -7,6 +7,27 @@ Database로 부터 데이터를 가공 해 주는 api 패키지 입니다.
 ```
  |-- .api
     |-- src
+        |-- commmon
+            |-- Object.py
+            |-- SystemEnvironment.py
+        |-- data
+            |-- Ingredient.py
+            |-- Note.py
+            |-- Perfume.py
+            |-- Serie.py
+        |-- internal
+            |-- entity
+                |-- BrandEntity.py
+                |-- IngredientCategoryEntity.py
+                |-- IngredientEntity.py
+                |-- NoteEntity.py
+                |-- PerfumeEntity.py
+                |-- SeriesEntity.py
+            |-- sql
+                |-- SqlModel.py
+                |-- SQLUtils.py
+        |-- repository
+        |-- Config.py
 ```
 
 - src: 소스 폴더 패키지

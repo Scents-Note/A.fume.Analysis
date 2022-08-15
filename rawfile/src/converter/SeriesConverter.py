@@ -1,7 +1,6 @@
 from api.src.Config import Config
 from api.src.internal.entity.SeriesEntity import SeriesEntity
-from api.src.internal.entity.SqlModel import series_model
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlModel import series_model
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 

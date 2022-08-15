@@ -1,6 +1,6 @@
 from api.src.Config import Config
 from api.src.internal.entity.IngredientEntity import IngredientEntity
-from api.src.internal.entity.SqlModel import ingredient_model
+from api.src.internal.sql.SqlModel import ingredient_model
 from api.src.repository.IngredientRepository import IngredientRepository
 from api.src.repository.SeriesRepository import SeriesRepository
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser

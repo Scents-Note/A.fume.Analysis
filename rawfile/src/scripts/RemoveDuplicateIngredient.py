@@ -1,4 +1,4 @@
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlUtil import SQLUtil
 
 
 def substitute(ingredient_idx, substitute_ingredient_idx):

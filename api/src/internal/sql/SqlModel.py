@@ -4,7 +4,7 @@ from api.src.Config import Config
 from api.src.common.Object import Singleton
 from api.src.internal.entity.BrandEntity import BrandEntity
 from api.src.internal.entity.SeriesEntity import SeriesEntity
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlUtil import SQLUtil
 
 
 class SqlModel(Singleton, abc.ABC):

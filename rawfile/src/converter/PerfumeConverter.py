@@ -1,10 +1,10 @@
 from api.src.Config import Config
 from api.src.internal.entity.NoteEntity import NoteEntity
 from api.src.internal.entity.PerfumeEntity import PerfumeEntity
-from api.src.internal.entity.SqlModel import perfume_model
+from api.src.internal.sql.SqlModel import perfume_model
 from api.src.repository.IngredientRepository import IngredientRepository
 from api.src.repository.NoteRepository import NoteRepository
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 

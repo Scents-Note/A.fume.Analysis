@@ -1,8 +1,8 @@
 from typing import List
 
 from api.src.data.Note import Note
-from api.src.internal.entity.SqlModel import note_model
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlModel import note_model
+from api.src.internal.sql.SqlUtil import SQLUtil
 
 
 class NoteRepository:

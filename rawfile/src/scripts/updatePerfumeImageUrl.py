@@ -1,6 +1,6 @@
 from api.src.internal.CrudRepository import CrudRepository
 from api.src.internal.entity.PerfumeEntity import PerfumeEntity
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlUtil import SQLUtil
 
 
 def main(perfume_idx_list):

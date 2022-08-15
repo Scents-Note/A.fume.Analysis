@@ -1,7 +1,7 @@
 from typing import List
 
 from api.src.data.Ingredient import Ingredient, IngredientInfo
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlUtil import SQLUtil
 
 
 class IngredientRepository:

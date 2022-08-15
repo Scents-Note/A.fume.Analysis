@@ -1,7 +1,7 @@
 from typing import List
 
 from api.src.data.Series import Series
-from api.src.internal.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SqlUtil import SQLUtil
 
 cached_series_idx: dict = {}
 
