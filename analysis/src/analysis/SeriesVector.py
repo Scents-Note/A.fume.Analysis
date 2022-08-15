@@ -1,7 +1,10 @@
 import pandas as pd
 
-from analysis.src.data.Note import Note
-from analysis.src.repository import NoteRepository, IngredientRepository, PerfumeRepository, SeriesRepository
+from api.src.data.Note import Note
+from api.src.repository.IngredientRepository import IngredientRepository
+from api.src.repository.NoteRepository import NoteRepository
+from api.src.repository.PerfumeRepository import PerfumeRepository
+from api.src.repository.SeriesRepository import SeriesRepository
 
 PERFUME_IDX = 'perfume_idx'
 PERFUME_NAME = '향수 이름'
@@ -23,10 +26,6 @@ def get_series_vector():
         for ingredient in ingredient_list
     }
     series_list = SeriesRepository.get_series_all()
-    series_map = {
-        series.idx: series
-        for series in series_list
-    }
 
     note_df = pd.DataFrame(map(Note.get_json, note_list))
 
@@ -65,8 +64,4 @@ def main():
 
 
 if __name__ == '__main__':
-    from dotenv import load_dotenv
-
-    load_dotenv()
-
     main()

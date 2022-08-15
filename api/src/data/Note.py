@@ -17,5 +17,5 @@ class Note:
         return {
             'perfume_idx': note.perfume_idx,
             'ingredient_idx': note.ingredient_idx,
-            'type': note.type
+            'type': note.note_type
         }

@@ -1,3 +1,5 @@
+from typing import List
+
 from analysis.src.repository.SQLUtil import SQLUtil
 from api.src.entity.SqlEntity import Note
 from api.src.repository.CrudRepository import CrudRepository
@@ -33,3 +35,24 @@ class NoteRepository:
         [CrudRepository.create(note) for note in added_set]
         [CrudRepository.delete(note) for note in removed_set]
 
+    @staticmethod
+    def get_note_list_by_perfume_idx_and_note(perfume_idx: int, note_type: int = None) -> List[Note]:
+        if note_type:
+            sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx={} AND type={}' \
+                .format(perfume_idx, note_type)
+        else:
+            sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx={}' \
+                .format(perfume_idx)
+
+        SQLUtil.instance().execute(sql=sql)
+        return [Note(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
+                SQLUtil.instance().fetchall()]
+
+    @staticmethod
+    def get_note_list_by_perfume_idx_list(perfume_idx_list) -> List[Note]:
+        sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx in {}' \
+            .format("({})".format(", ".join(map(str, perfume_idx_list))))
+
+        SQLUtil.instance().execute(sql=sql)
+        return [Note(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
+                SQLUtil.instance().fetchall()]
