@@ -8,5 +8,5 @@ class Ingredient:
         self.series_idx = series_idx
 
     def __str__(self):
-        return 'Ingredient({}, {}, {}, {}, {}, {})'.format(self.idx, self.name,
-                                                           self.description, self.image_url, self.series_idx)
+        return 'Ingredient({}, {}, {}, {}, {})'.format(self.idx, self.name,
+                                                       self.description, self.image_url, self.series_idx)

@@ -20,12 +20,13 @@ class SqlModel(Singleton, abc.ABC):
         result = SQLUtil.instance().execute(sql=sql, args=value_list)
         return result
 
-    def read(self, data: dict):
+    def readByPk(self, data: dict) -> any:
         primary_key_query, primary_key_values = self.__generate_primary_key_condition(data)
 
         sql_query = 'SELECT * FROM {} WHERE {}'.format(self.get_table_name(), primary_key_query)
         value_list = primary_key_values
-        return SQLUtil.instance().execute(sql=sql_query, args=value_list)
+        SQLUtil.instance().execute(sql=sql_query, args=value_list)
+        return SQLUtil.instance().fetchall()[0]
 
     def update(self, data: dict):
         if Config.instance().READ_ONLY:
