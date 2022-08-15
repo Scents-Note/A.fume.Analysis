@@ -8,7 +8,7 @@ class Config(SystemEnvironment):
         super(Config, self).__init__()
 
         self.INPUT_DIR_PATH = self.getenv_str('INPUT_DIR_PATH', './input')
-        self.OUTPUT_DIR_PATH = self.getenv_str('OUTPUT_DIR_PATH', './../output')
+        self.OUTPUT_DIR_PATH = self.getenv_str('OUTPUT_DIR_PATH', './output')
         self.DEBUG = self.getenv_str('DEBUG', 'false').lower() == 'true'
         self.TARGET = self.getenv_str('TARGET', '*')
         self.COMMAND = self.getenv_str('COMMAND')

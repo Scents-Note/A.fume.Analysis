@@ -20,9 +20,9 @@ Database에 존재하는 여러 정보(table)을 하나의 Raw Excel로 변환 �
 
 ## 환경 변수
 
-| environment     | description       | example                                                   |
-|:----------------|:------------------|:----------------------------------------------------------|
-| INPUT_DIR_PATH  | 입력 excel 파일 경로    | /Users/mac/github/A.fume.Analysis/rawfile/input           |
-| OUTPUT_DIR_PATH | 출력 excel 저장 파일 경로 | /Users/mac/github/A.fume.Analysis/rawfile/output          |
-| TARGET          | 가져 오려고 하는 정보      | (ingredient_info,perfume_info,brand_info,series_info 중 1) |
-| COMMAND         | 수행 하는 작업의 종류      | db2excel 또는 excel2db                                      |
+| environment     | description       | default    | example                                                   |
+|:----------------|:------------------|:-----------|:----------------------------------------------------------|
+| INPUT_DIR_PATH  | 입력 excel 파일 경로    | ./input    | /Users/mac/github/A.fume.Analysis/rawfile/input           |
+| OUTPUT_DIR_PATH | 출력 excel 저장 파일 경로 | ./output   | /Users/mac/github/A.fume.Analysis/rawfile/output          |
+| TARGET          | 가져 오려고 하는 정보      | *          | (ingredient_info,perfume_info,brand_info,series_info 중 1) |
+| COMMAND         | 수행 하는 작업의 종류      | (required) | db2excel 또는 excel2db                                      |
