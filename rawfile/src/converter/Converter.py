@@ -4,9 +4,9 @@ from abc import abstractmethod, ABCMeta
 import openpyxl
 import pandas as pd
 
+from api.src.sql.SQLUtil import SQLUtil
 from rawfile.src.Config import Config
 from rawfile.src.common.Strings import CommandStr
-from api.src.repository_legacy.SQLUtil import SQLUtil
 
 
 class Converter(metaclass=ABCMeta):

@@ -1,7 +1,7 @@
 from api.src.Config import Config
-from api.src.data.Series import Series
-from api.src.repository_legacy.SQLUtil import SQLUtil
-from api.src.repository_legacy.SeriesRepository import update_series
+from api.src.entity.SqlEntity import Series
+from api.src.repository.CrudRepository import CrudRepository
+from api.src.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -34,6 +34,4 @@ class SeriesConverter(Converter):
 
     def read_line(self, row):
         series = self.parser.parse(row)
-        if series.get_json() is None:
-            return
-        update_series(series)
+        CrudRepository.update(series)

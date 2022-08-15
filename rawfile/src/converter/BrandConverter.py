@@ -1,7 +1,7 @@
 from api.src.Config import Config
-from api.src.data.Brand import Brand
-from api.src.repository_legacy.BrandRepository import update_brand
-from api.src.repository_legacy.SQLUtil import SQLUtil
+from api.src.entity.SqlEntity import Brand
+from api.src.repository.CrudRepository import CrudRepository
+from api.src.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -35,4 +35,4 @@ class BrandConverter(Converter):
 
     def read_line(self, row: any):
         brand = self.parser.parse(row)
-        update_brand(brand)
+        CrudRepository.update(brand)

@@ -1,10 +1,9 @@
 from api.src.Config import Config
-from api.src.data.Note import Note
-from api.src.data.Perfume import Perfume
-from api.src.repository_legacy.IngredientRepository import get_ingredient_idx_by_name
-from api.src.repository_legacy.NoteRepository import update_note_list
-from api.src.repository_legacy.PerfumeRepository import update_perfume
-from api.src.repository_legacy.SQLUtil import SQLUtil
+from api.src.entity.SqlEntity import Perfume, Note
+from api.src.repository.CrudRepository import CrudRepository
+from api.src.repository.IngredientRepository import IngredientRepository
+from api.src.repository.NoteRepository import NoteRepository
+from api.src.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -13,6 +12,7 @@ class PerfumeConverter(Converter):
     def __init__(self):
         super().__init__("{}_perfumes_raw".format(Config.instance().MYSQL_DB))
         self.perfume_parser = None
+        self.default_review_parser = None
         self.note_parser = None
 
     def get_data_list(self):
@@ -124,7 +124,6 @@ class PerfumeConverter(Converter):
             return Perfume(idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
                            image_url=json['image_url'], story=json['story'],
                            volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate)
-
         def doTaskNoteList(json) -> dict:
             perfume_idx = json['perfume_idx']
 
@@ -136,8 +135,8 @@ class PerfumeConverter(Converter):
                 ingredient_list = [it.strip() for it in note_str.split(',')]
 
                 for ingredient_name in ingredient_list:
-                    ingredient_idx = get_ingredient_idx_by_name(ingredient_name)
-                    note_list.append(Note(perfume_idx=perfume_idx, ingredient_idx=ingredient_idx, type=note_type))
+                    ingredient_idx = IngredientRepository.get_ingredient_idx_by_name(ingredient_name)
+                    note_list.append(Note(perfume_idx=perfume_idx, ingredient_idx=ingredient_idx, note_type=note_type))
 
                 return note_list
 
@@ -167,10 +166,10 @@ class PerfumeConverter(Converter):
 
     def read_line(self, row):
         perfume = self.perfume_parser.parse(row)
-        update_perfume(perfume)
+        CrudRepository.update(perfume)
 
         note_dict = self.note_parser.parse(row)
         for note_type, note_list in note_dict.items():
             if note_list is None:
                 continue
-            update_note_list(perfume_idx=perfume.idx, update_list=note_list, note_type=note_type)
+            NoteRepository.update_note_list(perfume_idx=perfume.idx, update_list=note_list, note_type=note_type)

@@ -1,9 +1,11 @@
 import pymysql
 from api.src.Config import Config
+from api.src.common.Object import Singleton
 
 
-class SQLUtil:
+class SQLUtil(Singleton):
     def __init__(self):
+        super().__init__()
         self.db = self.get_db()
         self.cursor = self.get_cursor(self.db)
         self.logging = False
@@ -45,18 +47,6 @@ class SQLUtil:
     @staticmethod
     def get_cursor(db):
         return db.cursor(pymysql.cursors.DictCursor)
-
-    __instance = None
-
-    @classmethod
-    def __getInstance(cls):
-        return cls.__instance
-
-    @classmethod
-    def instance(cls):
-        cls.__instance = cls()
-        cls.instance = cls.__getInstance
-        return cls.__instance
 
 
 if __name__ == '__main__':

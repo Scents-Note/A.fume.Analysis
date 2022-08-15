@@ -12,4 +12,5 @@ class Config(SystemEnvironment):
         self.MYSQL_HOST = self.getenv_str('MYSQL_HOST')
         self.MYSQL_CHARSET = self.getenv_str('MYSQL_CHARSET')
         self.MYSQL_PORT = self.getenv_int('MYSQL_PORT')
+        self.READ_ONLY = self.getenv_int('READ_ONLY', 1) == 1
 

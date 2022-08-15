@@ -1,8 +1,8 @@
 from api.src.Config import Config
-from api.src.data.Ingredient import Ingredient
-from api.src.repository_legacy.IngredientCategoryRepository import get_category_idx_by_name
-from api.src.repository_legacy.IngredientRepository import update_ingredient
-from api.src.repository_legacy.SQLUtil import SQLUtil
+from api.src.entity.SqlEntity import Ingredient
+from api.src.repository.CrudRepository import CrudRepository
+from api.src.repository.IngredientRepository import IngredientRepository
+from api.src.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -42,8 +42,8 @@ class IngredientConverter(Converter):
                                           description=json['description'],
                                           image_url=json['image_url'],
                                           series_idx=json['series_idx'],
-                                          category_idx=get_category_idx_by_name(json['category'])))
+                                          category_idx=IngredientRepository.get_category_idx_by_name(json['category'])))
 
     def read_line(self, row):
         ingredient = self.parser.parse(row)
-        update_ingredient(ingredient)
+        CrudRepository.update(ingredient)
