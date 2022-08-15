@@ -4,15 +4,14 @@ import dotenv
 
 from api.src.common.Object import Singleton
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
 
 class SystemEnvironment(Singleton):
 
     def __init__(self, env_path: str = os.getenv('ENV_PATH')):
         super().__init__()
         if env_path is None:
-            env_path = os.path.join(BASE_DIR, './../../../.env')
+            base_dir = os.path.abspath(os.path.dirname(__file__))
+            env_path = os.path.join(base_dir, './../../../.env')
         print("env_path is {}".format(env_path))
         dotenv.load_dotenv(dotenv_path=env_path)
 
