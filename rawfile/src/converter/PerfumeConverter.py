@@ -1,12 +1,9 @@
 from api.src.Config import Config
 from api.src.data.Note import Note
 from api.src.data.Perfume import Perfume
-from api.src.data.PerfumeDefaultReview import PerfumeDefaultReview
-from api.src.repository_legacy import KeywordRepository
 from api.src.repository_legacy.IngredientRepository import get_ingredient_idx_by_name
-from api.src.repository_legacy.KeywordRepository import get_keywords_by_idx_list
 from api.src.repository_legacy.NoteRepository import update_note_list
-from api.src.repository_legacy.PerfumeRepository import update_perfume_default_review, update_perfume
+from api.src.repository_legacy.PerfumeRepository import update_perfume
 from api.src.repository_legacy.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
@@ -16,7 +13,6 @@ class PerfumeConverter(Converter):
     def __init__(self):
         super().__init__("{}_perfumes_raw".format(Config.instance().MYSQL_DB))
         self.perfume_parser = None
-        self.default_review_parser = None
         self.note_parser = None
 
     def get_data_list(self):
@@ -45,13 +41,6 @@ class PerfumeConverter(Converter):
                                        '(SELECT GROUP_CONCAT(name) FROM notes AS n INNER JOIN ingredients '
                                        'AS i ON n.ingredient_idx = i.ingredient_idx WHERE n.perfume_idx = '
                                        'p.perfume_idx AND n.`type` = 4 ) AS {},'.format(ExcelColumn.COL_SINGLE_NOTE) +
-
-                                       'IFNULL(pdr.keyword, "") AS {},'.format(ExcelColumn.COL_DEFAULT_KEYWORD) +
-                                       'IFNULL(pdr.rating, "") AS {},'.format(ExcelColumn.COL_DEFAULT_SCORE) +
-                                       'IFNULL(pdr.seasonal, "") AS `{}`,'.format(ExcelColumn.COL_DEFAULT_SEASONAL) +
-                                       'IFNULL(pdr.sillage, "") AS  `{}`,'.format(ExcelColumn.COL_DEFAULT_SILLAGE) +
-                                       'IFNULL(pdr.longevity, "") AS `{}`,'.format(ExcelColumn.COL_DEFAULT_LONGEVITY) +
-                                       'IFNULL(pdr.gender, "") AS `{}`,'.format(ExcelColumn.COL_DEFAULT_GENDER) +
 
                                        # 'AVG(r.score) AS `[평균점수]`, '
                                        # '(SELECT COUNT(lp.user_idx) FROM like_perfumes AS lp WHERE '
@@ -115,8 +104,6 @@ class PerfumeConverter(Converter):
                                        'ON p.brand_idx = b.brand_idx '
                                        # 'LEFT JOIN reviews AS r '
                                        # 'ON p.perfume_idx = r.perfume_idx '
-                                       'LEFT JOIN perfume_default_reviews AS pdr '
-                                       'ON p.perfume_idx = pdr.perfume_idx '
                                        'GROUP BY p.perfume_idx')
 
         perfume_list = SQLUtil.instance().fetchall()
@@ -124,12 +111,6 @@ class PerfumeConverter(Converter):
         for perfume in perfume_list:
             perfume[ExcelColumn.COL_ABUNDANCE_RATE] = Perfume.abundance_rate_list[
                 perfume[ExcelColumn.COL_ABUNDANCE_RATE]]
-            # print(perfume[ExcelColumn.COL_DEFAULT_KEYWORD])
-            keyword_idx_list = list(filter(lambda x: len(x) > 0, perfume[ExcelColumn.COL_DEFAULT_KEYWORD].split(",")))
-            # print(keyword_idx_list)
-            perfume[ExcelColumn.COL_DEFAULT_KEYWORD] = get_keywords_by_idx_list(keyword_idx_list) if len(
-                keyword_idx_list) > 0 else ''
-            # print(perfume[ExcelColumn.COL_DEFAULT_KEYWORD])
 
         return perfume_list
 
@@ -143,20 +124,6 @@ class PerfumeConverter(Converter):
             return Perfume(idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
                            image_url=json['image_url'], story=json['story'],
                            volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate)
-
-        def doTaskDefaultReview(json) -> PerfumeDefaultReview:
-            if json['keyword'] is not None:
-                keyword_list = list(
-                    filter(lambda x: len(x) > 0, json['keyword'].split(',')) if json['keyword'] is not None else [])
-                for it in keyword_list:
-                    if it.isnumeric():
-                        KeywordRepository.get_keyword_by_idx(int(it))
-                    else:
-                        KeywordRepository.get_keyword_idx_by_name(it)
-                json['keyword'] = ",".join(keyword_list)
-            return PerfumeDefaultReview(idx=json['idx'], rating=json['rating'], seasonal=json['seasonal'],
-                                        sillage=json['sillage'], longevity=json['longevity'],
-                                        gender=json['gender'], keyword=json['keyword'])
 
         def doTaskNoteList(json) -> dict:
             perfume_idx = json['perfume_idx']
@@ -190,16 +157,6 @@ class PerfumeConverter(Converter):
             'abundance_rate_str': ExcelColumn.COL_ABUNDANCE_RATE
         }, doTaskPerfume)
 
-        self.default_review_parser = ExcelParser(columns_list, {
-            'idx': ExcelColumn.COL_IDX,
-            'rating': ExcelColumn.COL_DEFAULT_SCORE,
-            'seasonal': ExcelColumn.COL_DEFAULT_SEASONAL,
-            'sillage': ExcelColumn.COL_DEFAULT_SILLAGE,
-            'longevity': ExcelColumn.COL_DEFAULT_LONGEVITY,
-            'gender': ExcelColumn.COL_DEFAULT_GENDER,
-            'keyword': ExcelColumn.COL_DEFAULT_KEYWORD
-        }, doTaskDefaultReview)
-
         self.note_parser = ExcelParser(columns_list, {
             'perfume_idx': ExcelColumn.COL_IDX,
             'top_note_str': ExcelColumn.COL_TOP_NOTE,
@@ -211,9 +168,6 @@ class PerfumeConverter(Converter):
     def read_line(self, row):
         perfume = self.perfume_parser.parse(row)
         update_perfume(perfume)
-
-        perfumeDefaultReview = self.default_review_parser.parse(row)
-        update_perfume_default_review(perfumeDefaultReview)
 
         note_dict = self.note_parser.parse(row)
         for note_type, note_list in note_dict.items():
