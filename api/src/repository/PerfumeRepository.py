@@ -1,7 +1,7 @@
 from typing import List
 
-from api.src.entity.SqlEntity import Perfume
-from api.src.sql.SQLUtil import SQLUtil
+from api.src.data.Perfume import Perfume
+from api.src.internal.sql.SQLUtil import SQLUtil
 
 
 class PerfumeRepository:

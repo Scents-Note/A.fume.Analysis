@@ -1,9 +1,10 @@
 from api.src.Config import Config
-from api.src.entity.SqlEntity import Perfume, Note
-from api.src.repository.CrudRepository import CrudRepository
+from api.src.internal.CrudRepository import CrudRepository
+from api.src.internal.entity.NoteEntity import NoteEntity
+from api.src.internal.entity.PerfumeEntity import PerfumeEntity
 from api.src.repository.IngredientRepository import IngredientRepository
 from api.src.repository.NoteRepository import NoteRepository
-from api.src.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -109,21 +110,22 @@ class PerfumeConverter(Converter):
         perfume_list = SQLUtil.instance().fetchall()
 
         for perfume in perfume_list:
-            perfume[ExcelColumn.COL_ABUNDANCE_RATE] = Perfume.abundance_rate_list[
+            perfume[ExcelColumn.COL_ABUNDANCE_RATE] = PerfumeEntity.abundance_rate_list[
                 perfume[ExcelColumn.COL_ABUNDANCE_RATE]]
 
         return perfume_list
 
     def prepare_parser(self, columns_list):
 
-        def doTaskPerfume(json) -> Perfume:
-            abundance_rate = Perfume.abundance_rate_list.index(
+        def doTaskPerfume(json) -> PerfumeEntity:
+            abundance_rate = PerfumeEntity.abundance_rate_list.index(
                 json['abundance_rate_str']) if json['abundance_rate_str'] is not None else None
             if abundance_rate == -1:
                 raise RuntimeError("abundance_rate_str is not invalid: " + json['abundance_rate_str'])
-            return Perfume(idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
-                           image_url=json['image_url'], story=json['story'],
-                           volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate)
+            return PerfumeEntity(idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
+                                 image_url=json['image_url'], story=json['story'],
+                                 volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate)
+
         def doTaskNoteList(json) -> dict:
             perfume_idx = json['perfume_idx']
 
@@ -136,14 +138,15 @@ class PerfumeConverter(Converter):
 
                 for ingredient_name in ingredient_list:
                     ingredient_idx = IngredientRepository.get_ingredient_idx_by_name(ingredient_name)
-                    note_list.append(Note(perfume_idx=perfume_idx, ingredient_idx=ingredient_idx, note_type=note_type))
+                    note_list.append(
+                        NoteEntity(perfume_idx=perfume_idx, ingredient_idx=ingredient_idx, note_type=note_type))
 
                 return note_list
 
-            ret = {Note.TYPE_TOP: parse_note_str(json['top_note_str'], Note.TYPE_TOP),
-                   Note.TYPE_MIDDLE: parse_note_str(json['middle_note_str'], Note.TYPE_MIDDLE),
-                   Note.TYPE_BASE: parse_note_str(json['base_note_str'], Note.TYPE_BASE),
-                   Note.TYPE_SINGLE: parse_note_str(json['single_note_str'], Note.TYPE_SINGLE)}
+            ret = {NoteEntity.TYPE_TOP: parse_note_str(json['top_note_str'], NoteEntity.TYPE_TOP),
+                   NoteEntity.TYPE_MIDDLE: parse_note_str(json['middle_note_str'], NoteEntity.TYPE_MIDDLE),
+                   NoteEntity.TYPE_BASE: parse_note_str(json['base_note_str'], NoteEntity.TYPE_BASE),
+                   NoteEntity.TYPE_SINGLE: parse_note_str(json['single_note_str'], NoteEntity.TYPE_SINGLE)}
             return ret
 
         self.perfume_parser = ExcelParser(columns_list, {

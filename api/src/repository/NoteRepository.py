@@ -1,8 +1,8 @@
 from typing import List
 
-from analysis.src.repository.SQLUtil import SQLUtil
-from api.src.entity.SqlEntity import Note
-from api.src.repository.CrudRepository import CrudRepository
+from api.src.data.Note import Note
+from api.src.internal.CrudRepository import CrudRepository
+from api.src.internal.sql.SQLUtil import SQLUtil
 
 
 class NoteRepository:

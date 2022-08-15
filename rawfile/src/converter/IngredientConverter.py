@@ -1,8 +1,8 @@
 from api.src.Config import Config
-from api.src.entity.SqlEntity import Ingredient
-from api.src.repository.CrudRepository import CrudRepository
+from api.src.internal.entity.IngredientEntity import IngredientEntity
+from api.src.internal.CrudRepository import CrudRepository
 from api.src.repository.IngredientRepository import IngredientRepository
-from api.src.sql.SQLUtil import SQLUtil
+from api.src.internal.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -37,12 +37,13 @@ class IngredientConverter(Converter):
             'image_url': ExcelColumn.COL_IMAGE_URL,
             'series_idx': ExcelColumn.COL_SERIES_IDX,
             'category': ExcelColumn.COL_CATEGORY
-        }, doTask=lambda json: Ingredient(ingredient_idx=json['idx'], name=json['name'],
-                                          english_name=json['english_name'],
-                                          description=json['description'],
-                                          image_url=json['image_url'],
-                                          series_idx=json['series_idx'],
-                                          category_idx=IngredientRepository.get_category_idx_by_name(json['category'])))
+        }, doTask=lambda json: IngredientEntity(ingredient_idx=json['idx'], name=json['name'],
+                                                english_name=json['english_name'],
+                                                description=json['description'],
+                                                image_url=json['image_url'],
+                                                series_idx=json['series_idx'],
+                                                category_idx=IngredientRepository.get_category_idx_by_name(
+                                                    json['category'])))
 
     def read_line(self, row):
         ingredient = self.parser.parse(row)

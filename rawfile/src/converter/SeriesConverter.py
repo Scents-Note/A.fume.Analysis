@@ -1,7 +1,7 @@
 from api.src.Config import Config
-from api.src.entity.SqlEntity import Series
-from api.src.repository.CrudRepository import CrudRepository
-from api.src.sql.SQLUtil import SQLUtil
+from api.src.internal.entity.SeriesEntity import SeriesEntity
+from api.src.internal.CrudRepository import CrudRepository
+from api.src.internal.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -16,8 +16,8 @@ class SeriesConverter(Converter):
         SQLUtil.instance().execute(
             sql="SELECT s.series_idx AS {}, s.name AS {}, s.english_name AS {}, s.description AS {}, "
                 "s.image_url AS {} FROM series AS s"
-                .format(ExcelColumn.COL_IDX, ExcelColumn.COL_NAME, ExcelColumn.COL_ENGLISH_NAME,
-                        ExcelColumn.COL_DESCRIPTION, ExcelColumn.COL_IMAGE_URL))
+            .format(ExcelColumn.COL_IDX, ExcelColumn.COL_NAME, ExcelColumn.COL_ENGLISH_NAME,
+                    ExcelColumn.COL_DESCRIPTION, ExcelColumn.COL_IMAGE_URL))
 
         return SQLUtil.instance().fetchall()
 
@@ -28,9 +28,10 @@ class SeriesConverter(Converter):
             'english_name': ExcelColumn.COL_ENGLISH_NAME,
             'image_url': ExcelColumn.COL_IMAGE_URL,
             'description': ExcelColumn.COL_DESCRIPTION
-        }, lambda result_json: Series(series_idx=result_json['series_idx'], name=result_json['name'],
-                                      english_name=result_json['english_name'], image_url=result_json['image_url'],
-                                      description=result_json['description']))
+        }, lambda result_json: SeriesEntity(series_idx=result_json['series_idx'], name=result_json['name'],
+                                            english_name=result_json['english_name'],
+                                            image_url=result_json['image_url'],
+                                            description=result_json['description']))
 
     def read_line(self, row):
         series = self.parser.parse(row)

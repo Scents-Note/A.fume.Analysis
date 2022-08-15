@@ -1,6 +1,6 @@
-from analysis.src.repository.SQLUtil import SQLUtil
 from api.src.Config import Config
-from api.src.entity.SqlEntity import SqlEntity
+from api.src.internal.entity.SqlEntity import SqlEntity
+from api.src.internal.sql.SQLUtil import SQLUtil
 
 
 class CrudRepository:

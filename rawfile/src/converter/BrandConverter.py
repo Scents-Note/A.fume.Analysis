@@ -1,7 +1,7 @@
 from api.src.Config import Config
-from api.src.entity.SqlEntity import Brand
-from api.src.repository.CrudRepository import CrudRepository
-from api.src.sql.SQLUtil import SQLUtil
+from api.src.internal.entity.BrandEntity import BrandEntity
+from api.src.internal.CrudRepository import CrudRepository
+from api.src.internal.sql.SQLUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
@@ -29,7 +29,7 @@ class BrandConverter(Converter):
             'first_initial': ExcelColumn.COL_FIRST_INITIAL,
             'description': ExcelColumn.COL_DESCRIPTION,
             'image_url': ExcelColumn.COL_IMAGE_URL
-        }, doTask=lambda json: Brand(brand_idx=json['idx'], name=json['name'], english_name=json['english_name'],
+        }, doTask=lambda json: BrandEntity(brand_idx=json['idx'], name=json['name'], english_name=json['english_name'],
                                      first_initial=json['first_initial'],
                                      description=json['description'], image_url=json['image_url']))
 
