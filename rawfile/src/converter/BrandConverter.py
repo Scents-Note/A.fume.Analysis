@@ -15,7 +15,6 @@ class BrandConverter(Converter):
         return [{
             ExcelColumn.COL_IDX: brand.brand_idx,
             ExcelColumn.COL_NAME: brand.name,
-            ExcelColumn.COL_ENGLISH_NAME: brand.english_name,
             ExcelColumn.COL_FIRST_INITIAL: brand.first_initial,
             ExcelColumn.COL_IMAGE_URL: brand.image_url,
             ExcelColumn.COL_DESCRIPTION: brand.description

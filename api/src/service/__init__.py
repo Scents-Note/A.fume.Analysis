@@ -15,6 +15,7 @@ class PerfumeService(Singleton):
 
     @staticmethod
     def get_perfume_ingredient_info_list() -> pd.DataFrame:
+        sql_util = SQLUtil.instance()
         sql = "SELECT p.perfume_idx as '{}', p.name as '{}', " \
               "GROUP_CONCAT(DISTINCT(i.name)) AS '{}', " \
               "GROUP_CONCAT(DISTINCT(ic.name)) AS '{}', " \
@@ -30,8 +31,7 @@ class PerfumeService(Singleton):
               "ON i.category_idx = ic.id " \
               "GROUP BY p.perfume_idx ".format(COL_PERFUME_IDX, COL_PERFUME_NAME, COL_INGREDIENT_NAME_LIST,
                                                COL_CATEGORY_NAME_LIST, COL_SERIES_NAME_LIST)
-        SQLUtil.instance().execute(sql=sql)
-        result = SQLUtil.instance().fetchall()
+        result = sql_util.execute(sql=sql)
 
         def convert_to_array(text: str) -> str:
             return str(sorted(text.split(',')))

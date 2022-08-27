@@ -7,13 +7,12 @@ from api.src.internal.entity.SeriesEntity import SeriesEntity
 from api.src.internal.sql.SqlUtil import SQLUtil
 
 
+sql_util = SQLUtil.instance()
 class SqlModel(Singleton, abc.ABC):
 
     def read_all(self) -> [any]:
         sql = "SELECT * FROM {}".format(self.get_table_name())
-        SQLUtil.instance().execute(sql=sql)
-
-        return SQLUtil.instance().fetchall()
+        return sql_util.execute(sql=sql)
 
     def create(self, data: dict):
         update_query, update_values = self.__generate_update_condition(data)
@@ -25,16 +24,14 @@ class SqlModel(Singleton, abc.ABC):
                     ", ".join(['%d' if data[key].isnumeric() else '%s' for key in keys]),
                     update_query)
         value_list = [update_values]
-        result = SQLUtil.instance().execute(sql=sql, args=value_list)
-        return result
+        return sql_util.execute(sql=sql, args=value_list)
 
     def readByPk(self, data: dict) -> any:
         primary_key_query, primary_key_values = self.__generate_primary_key_condition(data)
 
         sql_query = 'SELECT * FROM {} WHERE {}'.format(self.get_table_name(), primary_key_query)
         value_list = primary_key_values
-        SQLUtil.instance().execute(sql=sql_query, args=value_list)
-        return SQLUtil.instance().fetchall()[0]
+        return sql_util.execute(sql=sql_query, args=value_list)
 
     def update(self, data: dict):
         if Config.instance().READ_ONLY:
@@ -47,7 +44,7 @@ class SqlModel(Singleton, abc.ABC):
         sql_query = 'UPDATE {} SET {} WHERE {}'.format(self.get_table_name(), update_query,
                                                        primary_key_query)
         value_list = update_values + primary_key_values
-        SQLUtil.instance().execute(sql=sql_query, args=value_list)
+        sql_util.execute(sql=sql_query, args=value_list)
 
     def delete(self, data: dict):
         if Config.instance().READ_ONLY:
@@ -57,7 +54,7 @@ class SqlModel(Singleton, abc.ABC):
         sql_query = 'DELETE FROM {} WHERE {}' \
             .format(self.get_table_name(),
                     primary_key_query)
-        SQLUtil.instance().execute(sql=sql_query, args=primary_key_values)
+        sql_util.execute(sql=sql_query, args=primary_key_values)
 
     @abc.abstractmethod
     def get_primary_keys(self) -> [str]:

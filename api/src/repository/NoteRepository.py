@@ -4,6 +4,8 @@ from api.src.data.Note import Note
 from api.src.internal.sql.SqlModel import note_model
 from api.src.internal.sql.SqlUtil import SQLUtil
 
+sql_util = SQLUtil.instance()
+
 
 class NoteRepository:
 
@@ -11,9 +13,9 @@ class NoteRepository:
     def get_note_list_by_perfume_idx(perfume_idx, note_type):
         sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx={} AND type={}' \
             .format(perfume_idx, note_type)
-        SQLUtil.instance().execute(sql=sql)
+        result = sql_util.execute(sql=sql)
         return [Note(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
-                SQLUtil.instance().fetchall()]
+                result]
 
     @staticmethod
     def update_note_list(perfume_idx, note_type, update_list):
@@ -44,15 +46,15 @@ class NoteRepository:
             sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx={}' \
                 .format(perfume_idx)
 
-        SQLUtil.instance().execute(sql=sql)
+        result = sql_util.execute(sql=sql)
         return [Note(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
-                SQLUtil.instance().fetchall()]
+                result]
 
     @staticmethod
     def get_note_list_by_perfume_idx_list(perfume_idx_list) -> List[Note]:
         sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx in {}' \
             .format("({})".format(", ".join(map(str, perfume_idx_list))))
 
-        SQLUtil.instance().execute(sql=sql)
+        result = sql_util.execute(sql=sql)
         return [Note(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
-                SQLUtil.instance().fetchall()]
+                result]
