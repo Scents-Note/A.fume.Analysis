@@ -6,38 +6,38 @@ def substitute(ingredient_idx, substitute_ingredient_idx):
                  "WHERE ingredient_idx = {} OR ingredient_idx = {} " \
                  "GROUP BY perfume_idx " \
         .format(ingredient_idx, substitute_ingredient_idx)
-    SQLUtil.instance().execute(note_query)
-    note_list = SQLUtil.instance().fetchall()
+    sql_util = SQLUtil.instance()
+    note_list = sql_util.execute(note_query)
     for note in note_list:
         if note['count'] == 1:
             if note['ingredient_idx'] != substitute_ingredient_idx:
                 query = "UPDATE notes SET ingredient_idx = {} " \
                         "WHERE ingredient_idx = {} AND perfume_idx = {} AND type = {}" \
                     .format(substitute_ingredient_idx, note['ingredient_idx'], note['perfume_idx'], note['type'])
-                SQLUtil.instance().execute(query)
+                sql_util.execute(query)
         elif note['count'] == 2:
             query = "DELETE FROM notes WHERE ingredient_idx = {} AND perfume_idx = {} AND type = {}".format(
                 note['ingredient_idx'], note['perfume_idx'], note['type'])
-            SQLUtil.instance().execute(query)
+            sql_util.execute(query)
         else:
             raise Exception("???")
 
     remove_ingredient_query = "DELETE FROM ingredients WHERE ingredient_idx = {}".format(ingredient_idx)
-    SQLUtil.instance().execute(remove_ingredient_query)
+    sql_util.execute(remove_ingredient_query)
 
 
 def main():
+    sql_util = SQLUtil.instance()
+
     query = "SELECT english_name FROM ingredients GROUP BY english_name HAVING COUNT(english_name) > 1"
-    SQLUtil.instance().execute(query)
-    duplicated_english_name_list = SQLUtil.instance().fetchall()
+    duplicated_english_name_list = sql_util.execute(query)
     for item in duplicated_english_name_list:
         english_name = item['english_name']
         if len(english_name) == 0:
             continue
         query = "SELECT ingredient_idx, name, english_name FROM ingredients WHERE english_name = '{}'".format(
             english_name)
-        SQLUtil.instance().execute(query)
-        ingredient_list = SQLUtil.instance().fetchall()
+        ingredient_list = sql_util.execute(query)
         idx_list = [item['ingredient_idx'] for item in ingredient_list]
         idx_list.sort()
         correct_idx = idx_list.pop(0)
@@ -48,4 +48,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    SQLUtil.instance().commit()

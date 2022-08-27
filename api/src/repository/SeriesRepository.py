@@ -5,16 +5,16 @@ from api.src.internal.sql.SqlUtil import SQLUtil
 
 cached_series_idx: dict = {}
 
-
+sql_util = SQLUtil.instance()
 class SeriesRepository:
 
     @staticmethod
     def get_series_all() -> List[Series]:
         sql = 'SELECT * FROM series'
 
-        SQLUtil.instance().execute(sql=sql)
+        result = sql_util.execute(sql=sql)
         return [Series(idx=it['series_idx'], name=it['name'], description=it['description'])
-                for it in SQLUtil.instance().fetchall()]
+                for it in result]
 
     @staticmethod
     def get_series_idx(name: str) -> int:
@@ -22,8 +22,7 @@ class SeriesRepository:
             return cached_series_idx[name]
 
         sql = 'SELECT series_idx FROM series WHERE name = %s'
-        SQLUtil.instance().execute(sql, [name])
-        result = SQLUtil.instance().fetchall()
+        result = sql_util.execute(sql, [name])
         if len(result) == 0:
             raise RuntimeError('name[{}] is not a name of series'.format(name))
         if len(result) > 1:
@@ -34,11 +33,10 @@ class SeriesRepository:
 
 
 def main():
-    SQLUtil.instance().logging = True
-
+    sql_util.logging = True
+    sql_util.debug = True
     SeriesRepository.get_series_all()
 
 
 if __name__ == '__main__':
     main()
-    SQLUtil.instance().rollback()

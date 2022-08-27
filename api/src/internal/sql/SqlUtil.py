@@ -3,51 +3,70 @@ from api.src.Config import Config
 from api.src.common.Object import Singleton
 
 
+def get_db() -> pymysql.connections.Connection:
+    db = pymysql.connect(
+        user=Config.instance().MYSQL_USER,
+        passwd=Config.instance().MYSQL_PASSWD,
+        host=Config.instance().MYSQL_HOST,
+        db=Config.instance().MYSQL_DB,
+        charset=Config.instance().MYSQL_CHARSET,
+        port=Config.instance().MYSQL_PORT,
+    )
+    return db
+
+
+def get_cursor(db: pymysql.connections.Connection) -> pymysql.cursors.DictCursor:
+    return db.cursor(pymysql.cursors.DictCursor)
+
+
 class SQLUtil(Singleton):
     def __init__(self):
         super().__init__()
-        self.db = self.get_db()
-        self.cursor = self.get_cursor(self.db)
         self.logging = False
+        self.debug = False
 
-    def execute(self, sql, args=None):
-        if self.logging:
-            print(sql + " // " + str(args))
-        if args is not None:
-            result = self.cursor.execute(sql, tuple(args))
+    def open(self, *commands):
+        db = get_db()
+        cursor = get_cursor(db)
+        ret = []
+        for command in commands:
+            result = command(cursor)
+            if result:
+                ret.append(result)
+        if not self.debug:
+            db.commit()
         else:
-            result = self.cursor.execute(sql)
-        if self.logging:
-            print(result)
-        return result
+            db.rollback()
+        db.close()
+        return ret
 
-    def fetchall(self):
-        return self.cursor.fetchall()
+    def executeCommand(self, sql: str, args=None) -> any:
+        def _execute(cursor: any):
+            if self.logging:
+                print(sql + " // " + str(args))
+            if args is not None:
+                result = cursor.execute(sql, tuple(args))
+            else:
+                result = cursor.execute(sql)
+            if self.logging:
+                print(result)
+            return None
 
-    def commit(self):
-        self.db.commit()
-        return
+        return _execute
 
-    def rollback(self):
-        self.db.rollback()
-        return
+    def fetchallCommand(self):
+        def _fetchall(cursor: any):
+            return cursor.fetchall()
 
-    @staticmethod
-    def get_db():
-        db = pymysql.connect(
-            user=Config.instance().MYSQL_USER,
-            passwd=Config.instance().MYSQL_PASSWD,
-            host=Config.instance().MYSQL_HOST,
-            db=Config.instance().MYSQL_DB,
-            charset=Config.instance().MYSQL_CHARSET,
-            port=Config.instance().MYSQL_PORT,
-        )
-        return db
+        return _fetchall
 
-    @staticmethod
-    def get_cursor(db):
-        return db.cursor(pymysql.cursors.DictCursor)
+    def execute(self, sql: str, args=None) -> any:
+        return self.open(
+            self.executeCommand(sql=sql, args=args),
+            self.fetchallCommand()
+        )[0]
 
 
 if __name__ == '__main__':
-    print(SQLUtil.instance().execute(sql='select * from perfumes'))
+    sql_util = SQLUtil.instance()
+    print(sql_util.execute(sql='select * from perfumes'))

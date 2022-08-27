@@ -70,17 +70,13 @@ class Converter(metaclass=ABCMeta):
         pass
 
     def do_command(self, command_str, out_path: str = None):
-        SQLUtil.instance().logging = True
+        sql_util = SQLUtil.instance()
+        sql_util.logging = True
         if command_str == CommandStr.db2excel:
             self.db2excel(out_path)
         elif command_str == CommandStr.excel2db:
+            sql_util.debug = Config.instance().DEBUG
+            print('debug: {}'.format(sql_util.debug))
             self.excel2db()
-            print(Config.instance().DEBUG)
-            if Config.instance().DEBUG:
-                SQLUtil.instance().rollback()
-                print('---rollback---')
-            else:
-                SQLUtil.instance().commit()
-                print('---commit---')
         else:
             raise RuntimeError('Unknown Command')
