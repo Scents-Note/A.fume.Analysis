@@ -117,8 +117,17 @@ class PerfumeConverter(Converter):
     def prepare_parser(self, columns_list):
 
         def doTaskPerfume(json) -> PerfumeEntity:
+            def convert(text: str) -> str:
+                if text == "퍼퓸드 오일" or text == "센티드 워터" or text == "오 프라체":
+                    return "기타"
+                if text == "코롱" or text == "샤워 코롱" or text == "오드 코롱":
+                    return "오 드 코롱"
+                if text == "엑스뜨레 드 퍼퓸" or text == "퍼퓸 드 엑스뜨레":
+                    return "퍼퓸"
+                return text
+
             abundance_rate = PerfumeEntity.abundance_rate_list.index(
-                json['abundance_rate_str']) if json['abundance_rate_str'] is not None else None
+                convert(json['abundance_rate_str'])) if json['abundance_rate_str'] is not None else None
             if abundance_rate == -1:
                 raise RuntimeError("abundance_rate_str is not invalid: " + json['abundance_rate_str'])
             return PerfumeEntity(perfume_idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
