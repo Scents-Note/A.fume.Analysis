@@ -21,6 +21,7 @@ class ExcelColumn:
 
 
 CELL_COLOR_NONE = '00000000'
+CELL_COLOR_WHITE = 'FFFFFFFF'
 CELL_COLOR_UPDATE = 'FFFFFF00'
 CELL_COLOR_SKIP = 'FFFFC000'
 CELL_COLOR_DELETED = 'FF'
@@ -51,7 +52,7 @@ class ExcelParser:
         return json
 
     def get_cell_value(self, cell):
-        if cell.fill.start_color.rgb == CELL_COLOR_NONE:
+        if cell.fill.start_color.rgb == CELL_COLOR_NONE or cell.fill.start_color.rgb == CELL_COLOR_WHITE:
             return None
         if cell.fill.start_color.rgb == CELL_COLOR_SKIP:
             return None
