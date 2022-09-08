@@ -21,7 +21,7 @@ class SqlModel(Singleton, abc.ABC):
         sql = 'INSERT {}({}) VALUES({}) ON DUPLICATE KEY UPDATE {}' \
             .format(self.get_table_name(),
                     ", ".join(keys),
-                    ", ".join(['%d' if data[key].isnumeric() else '%s' for key in keys]),
+                    ", ".join(['%s' for _ in keys]),
                     update_query)
         value_list = [update_values]
         return sql_util.execute(sql=sql, args=value_list)
@@ -68,14 +68,14 @@ class SqlModel(Singleton, abc.ABC):
         return [self.__dict__[pk] for pk in self.get_primary_keys()]
 
     def __generate_update_condition(self, data: dict) -> (str, [any]):
-        keys = filter(lambda key: key not in self.get_primary_keys() and data[key] is not None, data.keys())
-        condition_str = ', '.join(['{} = {}'.format(key, '%d' if isinstance(data[key], int) else '%s') for key in keys])
+        keys = list(filter(lambda key: key not in self.get_primary_keys() and data[key] is not None, data.keys()))
+        condition_str = ', '.join(['{} = {}'.format(key, '%s') for key in keys])
         value_list = [data[key] for key in keys]
         return condition_str, value_list
 
     def __generate_primary_key_condition(self, dic: dict) -> (str, [any]):
         keys = self.get_primary_keys()
-        condition_str = ', '.join(['{} = {}'.format(pk, '%d') for pk in keys])
+        condition_str = ', '.join(['{} = {}'.format(pk, '%s') for pk in keys])
         value_list = [dic[key] for key in keys]
         return condition_str, value_list
 
