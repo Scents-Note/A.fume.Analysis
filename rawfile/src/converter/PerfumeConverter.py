@@ -121,7 +121,7 @@ class PerfumeConverter(Converter):
                 json['abundance_rate_str']) if json['abundance_rate_str'] is not None else None
             if abundance_rate == -1:
                 raise RuntimeError("abundance_rate_str is not invalid: " + json['abundance_rate_str'])
-            return PerfumeEntity(idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
+            return PerfumeEntity(perfume_idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
                                  image_url=json['image_url'], story=json['story'],
                                  volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate)
 

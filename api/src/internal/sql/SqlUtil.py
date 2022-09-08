@@ -38,6 +38,8 @@ class SQLUtil(Singleton):
         else:
             db.rollback()
         db.close()
+        if len(ret) == 0:
+            return [None]
         return ret
 
     def executeCommand(self, sql: str, args=None) -> any:
