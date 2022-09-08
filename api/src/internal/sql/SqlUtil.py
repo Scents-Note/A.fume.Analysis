@@ -23,7 +23,7 @@ class SQLUtil(Singleton):
     def __init__(self):
         super().__init__()
         self.logging = False
-        self.debug = False
+        self.debug = Config.instance().DEBUG
 
     def open(self, *commands):
         db = get_db()
