@@ -33,18 +33,19 @@ class SqlModel(Singleton, abc.ABC):
         value_list = primary_key_values
         return sql_util.execute(sql=sql_query, args=value_list)
 
-    def update(self, data: dict):
+    def update(self, data: dict) -> int:
         if Config.instance().READ_ONLY:
             raise "Because current is READ_ONLY mode, so it can't delete query"
         update_query, update_values = self.__generate_update_condition(data)
         if len(update_values) == 0:
-            return
+            return 0
         primary_key_query, primary_key_values = self.__generate_primary_key_condition(data)
 
         sql_query = 'UPDATE {} SET {} WHERE {}'.format(self.get_table_name(), update_query,
                                                        primary_key_query)
         value_list = update_values + primary_key_values
-        sql_util.execute(sql=sql_query, args=value_list)
+        affected_rows = sql_util.execute(sql=sql_query, args=value_list)
+        return affected_rows
 
     def delete(self, data: dict):
         if Config.instance().READ_ONLY:
