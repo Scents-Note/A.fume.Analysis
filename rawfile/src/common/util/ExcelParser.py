@@ -18,6 +18,7 @@ class ExcelColumn:
     COL_SERIES_IDX = "계열_id"
     COL_SERIES_NAME = "계열_이름"
     COL_CATEGORY = '카테고리'
+    COL_PUBLIC = '공개'
 
 
 CELL_COLOR_NONE = '00000000'
