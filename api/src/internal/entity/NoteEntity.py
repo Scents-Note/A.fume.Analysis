@@ -7,4 +7,4 @@ class NoteEntity:
     def __init__(self, perfume_idx: int, ingredient_idx: int, note_type: int):
         self.perfume_idx = perfume_idx
         self.ingredient_idx = ingredient_idx
-        self.note_type = note_type
+        self.type = note_type

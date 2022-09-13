@@ -12,8 +12,8 @@ class IngredientRepository:
     def get_ingredient_idx_by_name(name: str) -> int:
         sql = 'SELECT ingredient_idx FROM ingredients WHERE name="{}"'.format(name)
         result = sql_util.open(
-            sql_util.execute(sql=sql),
-            sql_util.fetchall()
+            sql_util.executeCommand(sql=sql),
+            sql_util.fetchallCommand()
         )[0]
         if len(result) == 0:
             raise RuntimeError("Wrong Ingredient name:[{}]".format(name))

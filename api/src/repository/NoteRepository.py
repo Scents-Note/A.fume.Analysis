@@ -14,6 +14,8 @@ class NoteRepository:
         sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx={} AND type={}' \
             .format(perfume_idx, note_type)
         result = sql_util.execute(sql=sql)
+        if result is None:
+            return []
         return [Note(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
                 result]
 

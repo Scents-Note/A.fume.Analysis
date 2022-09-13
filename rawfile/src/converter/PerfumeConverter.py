@@ -183,4 +183,4 @@ class PerfumeConverter(Converter):
         for note_type, note_list in note_dict.items():
             if note_list is None:
                 continue
-            NoteRepository.update_note_list(perfume_idx=perfume.idx, update_list=note_list, note_type=note_type)
+            NoteRepository.update_note_list(perfume_idx=perfume.perfume_idx, update_list=note_list, note_type=note_type)

@@ -16,6 +16,9 @@ class SqlModel(Singleton, abc.ABC):
 
     def create(self, data: dict):
         update_query, update_values = self.__generate_update_condition(data)
+        if len(update_values) == 0:
+            return
+
         keys = data.keys()
 
         sql = 'INSERT {}({}) VALUES({}) ON DUPLICATE KEY UPDATE {}' \
@@ -23,7 +26,7 @@ class SqlModel(Singleton, abc.ABC):
                     ", ".join(keys),
                     ", ".join(['%s' for _ in keys]),
                     update_query)
-        value_list = [update_values]
+        value_list = [data[key] for key in keys] + update_values
         return sql_util.execute(sql=sql, args=value_list)
 
     def readByPk(self, data: dict) -> any:
