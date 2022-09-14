@@ -17,6 +17,7 @@ class IngredientConverter(Converter):
         return [
             {ExcelColumn.COL_IDX: it.idx,
              ExcelColumn.COL_NAME: it.name,
+             ExcelColumn.COL_ENGLISH_NAME: it.english_name,
              ExcelColumn.COL_DESCRIPTION: it.description,
              ExcelColumn.COL_IMAGE_URL: it.image_url,
              ExcelColumn.COL_SERIES_NAME: it.series_name,

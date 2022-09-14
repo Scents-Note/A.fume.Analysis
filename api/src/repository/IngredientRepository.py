@@ -10,12 +10,12 @@ class IngredientRepository:
 
     @staticmethod
     def get_ingredient_idx_by_name(name: str) -> int:
-        sql = 'SELECT ingredient_idx FROM ingredients WHERE name="{}"'.format(name)
+        sql = 'SELECT ingredient_idx FROM ingredients WHERE name="{}" OR english_name="{}"'.format(name, name)
         result = sql_util.open(
             sql_util.executeCommand(sql=sql),
             sql_util.fetchallCommand()
         )[0]
-        if len(result) == 0:
+        if result is None:
             raise RuntimeError("Wrong Ingredient name:[{}]".format(name))
         return result[0]['ingredient_idx']
 

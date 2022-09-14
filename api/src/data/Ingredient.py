@@ -13,10 +13,12 @@ class Ingredient:
 
 
 class IngredientInfo:
-    def __init__(self, idx: int, name: str, description: str, series_idx: int, series_name: str, category_idx: int,
+    def __init__(self, idx: int, name: str, english_name: str, description: str, series_idx: int, series_name: str,
+                 category_idx: int,
                  category_name: str, image_url: str):
         self.idx = idx
         self.name = name
+        self.english_name = english_name
         self.description = description
         self.series_idx = series_idx
         self.series_name = series_name
@@ -26,7 +28,8 @@ class IngredientInfo:
 
     @staticmethod
     def create(data: dict):
-        return IngredientInfo(idx=data['idx'], name=data['name'], description=data['description'],
+        return IngredientInfo(idx=data['idx'], name=data['name'], english_name=data['english_name'],
+                              description=data['description'],
                               series_idx=data['series_idx'], series_name=data['series_name'],
                               category_idx=data['category_idx'], category_name=data['category_name'],
                               image_url=data['image_url'])
