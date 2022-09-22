@@ -6,8 +6,9 @@ from api.src.internal.entity.BrandEntity import BrandEntity
 from api.src.internal.entity.SeriesEntity import SeriesEntity
 from api.src.internal.sql.SqlUtil import SQLUtil
 
-
 sql_util = SQLUtil.instance()
+
+
 class SqlModel(Singleton, abc.ABC):
 
     def read_all(self) -> [any]:
@@ -53,7 +54,7 @@ class SqlModel(Singleton, abc.ABC):
     def delete(self, data: dict):
         if Config.instance().READ_ONLY:
             raise "Because current is READ_ONLY mode, so it can't delete query"
-        primary_key_query, primary_key_values = self.__generate_primary_key_condition(data)
+        primary_key_query, primary_key_values = self.__generate_primary_key_condition(data, delimiter=" AND ")
 
         sql_query = 'DELETE FROM {} WHERE {}' \
             .format(self.get_table_name(),
@@ -77,9 +78,9 @@ class SqlModel(Singleton, abc.ABC):
         value_list = [data[key] for key in keys]
         return condition_str, value_list
 
-    def __generate_primary_key_condition(self, dic: dict) -> (str, [any]):
+    def __generate_primary_key_condition(self, dic: dict, delimiter=', ') -> (str, [any]):
         keys = self.get_primary_keys()
-        condition_str = ', '.join(['{} = {}'.format(pk, '%s') for pk in keys])
+        condition_str = delimiter.join(['{} = {}'.format(pk, '%s') for pk in keys])
         value_list = [dic[key] for key in keys]
         return condition_str, value_list
 
