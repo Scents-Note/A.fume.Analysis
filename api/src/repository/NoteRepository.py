@@ -10,7 +10,7 @@ sql_util = SQLUtil.instance()
 class NoteRepository:
 
     @staticmethod
-    def get_note_list_by_perfume_idx(perfume_idx, note_type):
+    def get_note_list_by_perfume_idx(perfume_idx, note_type) -> List[Note]:
         sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx={} AND type={}' \
             .format(perfume_idx, note_type)
         result = sql_util.execute(sql=sql)
