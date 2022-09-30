@@ -5,11 +5,16 @@ from api.src.internal.sql.SqlUtil import SQLUtil
 
 sql_util = SQLUtil.instance()
 
+cache_dict_ingredient_by_name = {}
+cache_dict_category_by_name = {}
+
 
 class IngredientRepository:
 
     @staticmethod
     def get_ingredient_idx_by_name(name: str) -> int:
+        if name in cache_dict_ingredient_by_name:
+            return cache_dict_ingredient_by_name[name]
         sql = 'SELECT ingredient_idx FROM ingredients WHERE name="{}" OR english_name="{}"'.format(name, name)
         result = sql_util.open(
             sql_util.executeCommand(sql=sql),
@@ -17,15 +22,21 @@ class IngredientRepository:
         )[0]
         if result is None:
             raise RuntimeError("Wrong Ingredient name:[{}]".format(name))
-        return result[0]['ingredient_idx']
+        ingredient_idx = result[0]['ingredient_idx']
+        cache_dict_ingredient_by_name[name] = ingredient_idx
+        return ingredient_idx
 
     @staticmethod
     def get_category_idx_by_name(name: str):
+        if name in cache_dict_category_by_name:
+            return cache_dict_category_by_name[name]
         sql = 'SELECT id FROM ingredient_categories WHERE name="{}"'.format(name)
         result = sql_util.execute(sql=sql)
         if len(result) == 0:
             raise RuntimeError("Wrong IngredientCategory name:[{}]".format(name))
-        return result[0]['id']
+        category_idx = result[0]['id']
+        cache_dict_category_by_name[name] = category_idx
+        return category_idx
 
     @staticmethod
     def get_ingredient_list(ingredient_idx_list: [int]) -> List[Ingredient]:
