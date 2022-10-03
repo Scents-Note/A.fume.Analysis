@@ -1,6 +1,7 @@
 from typing import List
 
 from api.src.data.Note import Note
+from api.src.internal.entity.NoteEntity import NoteEntity
 from api.src.internal.sql.SqlModel import note_model
 from api.src.internal.sql.SqlUtil import SQLUtil
 
@@ -10,13 +11,13 @@ sql_util = SQLUtil.instance()
 class NoteRepository:
 
     @staticmethod
-    def get_note_list_by_perfume_idx(perfume_idx, note_type) -> List[Note]:
+    def get_note_list_by_perfume_idx(perfume_idx, note_type) -> List[NoteEntity]:
         sql = 'SELECT perfume_idx, ingredient_idx, type FROM notes WHERE perfume_idx={} AND type={}' \
             .format(perfume_idx, note_type)
         result = sql_util.execute(sql=sql)
         if result is None:
             return []
-        return [Note(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
+        return [NoteEntity(perfume_idx=it['perfume_idx'], ingredient_idx=it['ingredient_idx'], note_type=it['type']) for it in
                 result]
 
     @staticmethod
@@ -36,8 +37,8 @@ class NoteRepository:
         added_set = note_set.difference(db_set)
         removed_set = db_set.difference(note_set)
 
-        [note_model.create(note.__dict__) for note in added_set]
         [note_model.delete(note.__dict__) for note in removed_set]
+        [note_model.create(note.__dict__) for note in added_set]
 
     @staticmethod
     def get_note_list_by_perfume_idx_and_note(perfume_idx: int, note_type: int = None) -> List[Note]:

@@ -8,3 +8,11 @@ class NoteEntity:
         self.perfume_idx = perfume_idx
         self.ingredient_idx = ingredient_idx
         self.type = note_type
+
+    def __hash__(self):
+        return self.perfume_idx * 100 + self.ingredient_idx * 10 + self.type
+
+    def __eq__(self, other):
+        if not isinstance(self, NoteEntity):
+            return False
+        return self.perfume_idx == other.perfume_idx and self.ingredient_idx == other.ingredient_idx and self.type == other.type
