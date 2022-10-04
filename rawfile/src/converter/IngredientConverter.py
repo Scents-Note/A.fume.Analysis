@@ -39,6 +39,7 @@ class IngredientConverter(Converter):
         self.parser = ExcelParser(columns_list=columns_list, column_dict={
             'ingredient_idx': ExcelColumn.COL_IDX,
             'name': ExcelColumn.COL_NAME,
+            'english_name': ExcelColumn.COL_ENGLISH_NAME,
             'description': ExcelColumn.COL_DESCRIPTION,
             'image_url': ExcelColumn.COL_IMAGE_URL,
             'series_name': ExcelColumn.COL_SERIES_NAME,
