@@ -27,13 +27,21 @@ class IngredientRepository:
         return ingredient_idx
 
     @staticmethod
+    def create_category(name: str):
+        sql = 'INSERT INTO ingredient_categories(name) VALUES(%s)'
+        sql_util.execute(sql=sql, args=[name])
+
+    @staticmethod
     def get_category_idx_by_name(name: str):
         if name in cache_dict_category_by_name:
             return cache_dict_category_by_name[name]
         sql = 'SELECT id FROM ingredient_categories WHERE name="{}"'.format(name)
         result = sql_util.execute(sql=sql)
-        if len(result) == 0:
-            raise RuntimeError("Wrong IngredientCategory name:[{}]".format(name))
+        if result is None or len(result) == 0:
+            print("Wrong IngredientCategory name:[{}]".format(name))
+            IngredientRepository.create_category(name)
+            sql = 'SELECT id FROM ingredient_categories WHERE name="{}"'.format(name)
+            result = sql_util.execute(sql=sql)
         category_idx = result[0]['id']
         cache_dict_category_by_name[name] = category_idx
         return category_idx
