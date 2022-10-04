@@ -123,7 +123,7 @@ class IngredientCategoryModel(SqlModel):
 class IngredientModel(SqlModel):
 
     def get_primary_keys(self) -> [str]:
-        return ['brand_idx']
+        return ['ingredient_idx']
 
     def get_table_name(self) -> str:
         return 'ingredients'
