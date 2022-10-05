@@ -29,6 +29,7 @@ class PerfumeService(Singleton):
               "ON s.series_idx = i.series_idx " \
               "INNER JOIN ingredient_categories AS ic " \
               "ON i.category_idx = ic.id " \
+              "WHERE p.deleted_at is NULL " \
               "GROUP BY p.perfume_idx ".format(COL_PERFUME_IDX, COL_PERFUME_NAME, COL_INGREDIENT_NAME_LIST,
                                                COL_CATEGORY_NAME_LIST, COL_SERIES_NAME_LIST)
         result = sql_util.execute(sql=sql)
