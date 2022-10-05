@@ -123,10 +123,12 @@ class PerfumeConverter(Converter):
             'single_note_str': ExcelColumn.COL_SINGLE_NOTE
         }, doTaskNoteList)
 
+        IngredientRepository.init_cache()
+
     def read_line(self, row):
         perfume = self.perfume_parser.parse(row)
         perfume_model.update(perfume.__dict__)
-
+        print("-------{}----------".format(perfume.perfume_idx))
         note_dict = self.note_parser.parse(row)
         for note_type, note_list in note_dict.items():
             if note_list is None:

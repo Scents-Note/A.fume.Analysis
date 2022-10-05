@@ -12,6 +12,28 @@ cache_dict_category_by_name = {}
 class IngredientRepository:
 
     @staticmethod
+    def init_cache():
+        sql = 'SELECT ingredient_idx, name, english_name FROM ingredients'
+        result = sql_util.open(
+            sql_util.executeCommand(sql=sql),
+            sql_util.fetchallCommand()
+        )[0]
+        for item in result:
+            ingredient_idx = item['ingredient_idx']
+            name = item['name']
+            cache_dict_ingredient_by_name[name] = ingredient_idx
+
+        sql = 'SELECT id, name FROM ingredient_categories'
+        result = sql_util.open(
+            sql_util.executeCommand(sql=sql),
+            sql_util.fetchallCommand()
+        )[0]
+        for item in result:
+            idx = item['id']
+            name = item['name']
+            cache_dict_category_by_name[name] = idx
+
+    @staticmethod
     def get_ingredient_idx_by_name(name: str) -> int:
         if name in cache_dict_ingredient_by_name:
             return cache_dict_ingredient_by_name[name]
