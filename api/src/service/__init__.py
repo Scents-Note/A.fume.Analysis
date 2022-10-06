@@ -2,10 +2,15 @@ import numpy as np
 import pandas as pd
 
 from api.src.common.Object import Singleton
+from api.src.internal.entity.PerfumeEntity import PerfumeEntity
 from api.src.internal.sql.SqlUtil import SQLUtil
 
 COL_PERFUME_IDX = 'perfume_idx'
 COL_PERFUME_NAME = 'perfume_name'
+COL_PERFUME_ENGLISH_NAME = 'perfume_english_name'
+COL_PERFUME_STORY = 'perfume_story'
+COL_PERFUME_VOLUME_AND_PRICE = 'perfume_volume_and_price'
+COL_PERFUME_ABUNDANCE_RATE = 'perfume_abundance_rate'
 COL_INGREDIENT_NAME_LIST = 'ingredient_name_list'
 COL_CATEGORY_NAME_LIST = 'category_name_list'
 COL_SERIES_NAME_LIST = 'series_name_list'
@@ -17,6 +22,10 @@ class PerfumeService(Singleton):
     def get_perfume_ingredient_info_list() -> pd.DataFrame:
         sql_util = SQLUtil.instance()
         sql = "SELECT p.perfume_idx as '{}', p.name as '{}', " \
+              "p.english_name as '{}', " \
+              "p.story as '{}', " \
+              "p.volume_and_price as '{}', " \
+              "p.abundance_rate as '{}', " \
               "GROUP_CONCAT(DISTINCT(i.name)) AS '{}', " \
               "GROUP_CONCAT(DISTINCT(ic.name)) AS '{}', " \
               "GROUP_CONCAT(DISTINCT(s.name)) AS '{}' " \
@@ -30,7 +39,10 @@ class PerfumeService(Singleton):
               "INNER JOIN ingredient_categories AS ic " \
               "ON i.category_idx = ic.id " \
               "WHERE p.deleted_at is NULL " \
-              "GROUP BY p.perfume_idx ".format(COL_PERFUME_IDX, COL_PERFUME_NAME, COL_INGREDIENT_NAME_LIST,
+              "GROUP BY p.perfume_idx ".format(COL_PERFUME_IDX, COL_PERFUME_NAME, COL_PERFUME_ENGLISH_NAME,
+                                               COL_PERFUME_STORY, COL_PERFUME_VOLUME_AND_PRICE,
+                                               COL_PERFUME_ABUNDANCE_RATE,
+                                               COL_INGREDIENT_NAME_LIST,
                                                COL_CATEGORY_NAME_LIST, COL_SERIES_NAME_LIST)
         result = sql_util.execute(sql=sql)
 
@@ -42,6 +54,10 @@ class PerfumeService(Singleton):
                 [
                     item[COL_PERFUME_IDX],
                     item[COL_PERFUME_NAME],
+                    item[COL_PERFUME_ENGLISH_NAME],
+                    item[COL_PERFUME_VOLUME_AND_PRICE],
+                    item[COL_PERFUME_STORY],
+                    PerfumeEntity.abundance_rate_list[item[COL_PERFUME_ABUNDANCE_RATE]],
                     convert_to_array(item[COL_SERIES_NAME_LIST]),
                     convert_to_array(item[COL_INGREDIENT_NAME_LIST]),
                     convert_to_array(item[COL_CATEGORY_NAME_LIST])
@@ -49,7 +65,9 @@ class PerfumeService(Singleton):
             ])
         index = list(map(lambda it: it[COL_PERFUME_IDX], result))
         df = pd.DataFrame(data=dummy, index=index, columns=[
-            COL_PERFUME_IDX, COL_PERFUME_NAME, COL_SERIES_NAME_LIST, COL_INGREDIENT_NAME_LIST, COL_CATEGORY_NAME_LIST
+            COL_PERFUME_IDX, COL_PERFUME_NAME, COL_PERFUME_ENGLISH_NAME, COL_PERFUME_VOLUME_AND_PRICE,
+            COL_PERFUME_STORY, COL_PERFUME_ABUNDANCE_RATE,
+            COL_SERIES_NAME_LIST, COL_INGREDIENT_NAME_LIST, COL_CATEGORY_NAME_LIST
         ])
         return df
 
