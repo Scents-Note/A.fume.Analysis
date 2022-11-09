@@ -56,7 +56,8 @@ class PerfumeConverter(Converter):
                                             'FROM perfumes AS p '
                                             'INNER JOIN brands AS b '
                                             'ON p.brand_idx = b.brand_idx '
-                                            'GROUP BY p.perfume_idx')
+                                            'GROUP BY p.perfume_idx '
+                                            'ORDER BY p.perfume_idx')
 
         for perfume in perfume_list:
             perfume[ExcelColumn.COL_ABUNDANCE_RATE] = PerfumeEntity.abundance_rate_list[
