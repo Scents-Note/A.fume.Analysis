@@ -74,7 +74,7 @@ class PerfumeConverter(Converter):
                     return "오 드 코롱"
                 if text == "엑스뜨레 드 퍼퓸" or text == "퍼퓸 드 엑스뜨레":
                     return "퍼퓸"
-                return text
+                return text.strip()
 
             abundance_rate = PerfumeEntity.abundance_rate_list.index(
                 convert(json['abundance_rate_str'])) if json['abundance_rate_str'] is not None else None
