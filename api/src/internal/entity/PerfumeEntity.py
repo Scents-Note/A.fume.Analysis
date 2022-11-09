@@ -7,7 +7,8 @@ class PerfumeEntity:
     def __init__(self, perfume_idx: int, name: Optional[str] = None, english_name: Optional[str] = None,
                  image_url: Optional[str] = None,
                  story: Optional[str] = None, volume_and_price: Optional[str] = None,
-                 abundance_rate: Optional[int] = None):
+                 abundance_rate: Optional[int] = None,
+                 deleted_at: Optional[str] = None):
         self.perfume_idx = perfume_idx
         self.name = name
         self.english_name = english_name
@@ -15,3 +16,4 @@ class PerfumeEntity:
         self.story = story
         self.volume_and_price = volume_and_price
         self.abundance_rate = abundance_rate
+        self.deleted_at = deleted_at

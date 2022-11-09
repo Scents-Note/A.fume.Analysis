@@ -1,3 +1,5 @@
+import datetime
+
 from api.src.Config import Config
 from api.src.internal.entity.NoteEntity import NoteEntity
 from api.src.internal.entity.PerfumeEntity import PerfumeEntity
@@ -78,9 +80,13 @@ class PerfumeConverter(Converter):
                 convert(json['abundance_rate_str'])) if json['abundance_rate_str'] is not None else None
             if abundance_rate == -1:
                 raise RuntimeError("abundance_rate_str is not invalid: " + json['abundance_rate_str'])
+            deleted_at = 'NULL' if json['public'] == 'O' else datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            json['deleted_at'] = deleted_at if json['public'] is not None else None
+
             return PerfumeEntity(perfume_idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
                                  image_url=json['image_url'], story=json['story'],
-                                 volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate)
+                                 volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate,
+                                 deleted_at=json['deleted_at'])
 
         def doTaskNoteList(json) -> dict:
             perfume_idx = json['perfume_idx']
@@ -112,7 +118,8 @@ class PerfumeConverter(Converter):
             'image_url': ExcelColumn.COL_MAIN_IMAGE,
             'story': ExcelColumn.COL_STORY,
             'volume_and_price': ExcelColumn.COL_VOLUME_AND_PRICE,
-            'abundance_rate_str': ExcelColumn.COL_ABUNDANCE_RATE
+            'abundance_rate_str': ExcelColumn.COL_ABUNDANCE_RATE,
+            'public': ExcelColumn.COL_PUBLIC
         }, doTaskPerfume)
 
         self.note_parser = ExcelParser(columns_list, {
