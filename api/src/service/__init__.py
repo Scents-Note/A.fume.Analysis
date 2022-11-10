@@ -36,15 +36,15 @@ class PerfumeService(Singleton):
               "GROUP_CONCAT(DISTINCT(ic.name)) AS '{}', " \
               "GROUP_CONCAT(DISTINCT(s.name)) AS '{}' " \
               "FROM perfumes AS p " \
-              "INNER JOIN brands AS b " \
+              "LEFT JOIN brands AS b " \
               "ON p.brand_idx = b.brand_idx " \
-              "INNER JOIN notes AS n " \
+              "LEFT JOIN notes AS n " \
               "ON p.perfume_idx = n.perfume_idx " \
-              "INNER JOIN ingredients AS i " \
+              "LEFT JOIN ingredients AS i " \
               "ON n.ingredient_idx = i.ingredient_idx " \
-              "INNER JOIN series as s " \
+              "LEFT JOIN series as s " \
               "ON s.series_idx = i.series_idx " \
-              "INNER JOIN ingredient_categories AS ic " \
+              "LEFT JOIN ingredient_categories AS ic " \
               "ON i.category_idx = ic.id " \
               "WHERE p.deleted_at is NULL " \
               "GROUP BY p.perfume_idx ".format(COL_PERFUME_IDX, COL_PERFUME_NAME, COL_PERFUME_ENGLISH_NAME,
@@ -58,6 +58,8 @@ class PerfumeService(Singleton):
         result = sql_util.execute(sql=sql)
 
         def convert_to_array(text: str) -> str:
+            if text is None:
+                return ""
             return str(sorted(text.split(',')))
 
         dummy = np.array(
