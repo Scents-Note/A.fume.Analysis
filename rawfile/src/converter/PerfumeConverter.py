@@ -4,6 +4,7 @@ from api.src.Config import Config
 from api.src.internal.entity.NoteEntity import NoteEntity
 from api.src.internal.entity.PerfumeEntity import PerfumeEntity
 from api.src.internal.sql.SqlModel import perfume_model
+from api.src.repository.BrandRepository import BrandRepository
 from api.src.repository.IngredientRepository import IngredientRepository
 from api.src.repository.NoteRepository import NoteRepository
 from api.src.internal.sql.SqlUtil import SQLUtil
@@ -84,7 +85,10 @@ class PerfumeConverter(Converter):
             deleted_at = 'NULL' if json['public'] == 'O' else datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             json['deleted_at'] = deleted_at if json['public'] is not None else None
 
+            brand_idx = BrandRepository.getBrandIdx(json['brand_name']) if json['brand_name'] is not None else None
+
             return PerfumeEntity(perfume_idx=json['perfume_idx'], name=json['name'], english_name=json['english_name'],
+                                 brand_idx=brand_idx,
                                  image_url=json['image_url'], story=json['story'],
                                  volume_and_price=json['volume_and_price'], abundance_rate=abundance_rate,
                                  deleted_at=json['deleted_at'])
@@ -115,6 +119,7 @@ class PerfumeConverter(Converter):
         self.perfume_parser = ExcelParser(columns_list, {
             'perfume_idx': ExcelColumn.COL_IDX,
             'name': ExcelColumn.COL_NAME,
+            'brand_name': ExcelColumn.COL_BRAND,
             'english_name': ExcelColumn.COL_ENGLISH_NAME,
             'image_url': ExcelColumn.COL_MAIN_IMAGE,
             'story': ExcelColumn.COL_STORY,
