@@ -11,6 +11,8 @@ from api.src.internal.sql.SqlUtil import SQLUtil
 from rawfile.src.common.util.ExcelParser import ExcelColumn, ExcelParser
 from rawfile.src.converter.Converter import Converter
 
+wrong_ingredient_name_list = []
+
 
 class PerfumeConverter(Converter):
     def __init__(self):
@@ -104,9 +106,13 @@ class PerfumeConverter(Converter):
                 ingredient_list = [it.strip() for it in note_str.split(',')]
 
                 for ingredient_name in ingredient_list:
-                    ingredient_idx = IngredientRepository.get_ingredient_idx_by_name(ingredient_name)
-                    note_list.append(
-                        NoteEntity(perfume_idx=perfume_idx, ingredient_idx=ingredient_idx, note_type=note_type))
+                    try:
+                        ingredient_idx = IngredientRepository.get_ingredient_idx_by_name(ingredient_name)
+                        note_list.append(
+                            NoteEntity(perfume_idx=perfume_idx, ingredient_idx=ingredient_idx, note_type=note_type))
+                    except RuntimeError as err:
+                        print(err)
+                        wrong_ingredient_name_list.append(ingredient_name)
 
                 return note_list
 
@@ -137,13 +143,24 @@ class PerfumeConverter(Converter):
         }, doTaskNoteList)
 
         IngredientRepository.init_cache()
+        print(wrong_ingredient_name_list)
 
     def read_line(self, row):
         perfume = self.perfume_parser.parse(row)
-        perfume_model.update(perfume.__dict__)
         print("-------{}----------".format(perfume.perfume_idx))
-        note_dict = self.note_parser.parse(row)
-        for note_type, note_list in note_dict.items():
-            if note_list is None:
-                continue
-            NoteRepository.update_note_list(perfume_idx=perfume.perfume_idx, update_list=note_list, note_type=note_type)
+        if perfume.perfume_idx is None:
+            if perfume.image_url is None:
+                perfume.image_url = ""
+            if perfume.volume_and_price is None:
+                perfume.volume_and_price = ""
+            if perfume.story is None:
+                perfume.story = ""
+            perfume_model.create(perfume.__dict__)
+        else:
+            perfume_model.update(perfume.__dict__)
+            note_dict = self.note_parser.parse(row)
+            for note_type, note_list in note_dict.items():
+                if note_list is None:
+                    continue
+                NoteRepository.update_note_list(perfume_idx=perfume.perfume_idx, update_list=note_list,
+                                                note_type=note_type)
