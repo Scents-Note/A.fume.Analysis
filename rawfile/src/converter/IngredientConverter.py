@@ -48,4 +48,11 @@ class IngredientConverter(Converter):
 
     def read_line(self, row):
         ingredient = self.parser.parse(row)
-        ingredient_model.update(ingredient.__dict__)
+        if ingredient.ingredient_idx is None:
+            if ingredient.description is None:
+                ingredient.description = ""
+            if ingredient.image_url is None:
+                ingredient.image_url = ""
+            ingredient_model.create(ingredient.__dict__)
+        else:
+            ingredient_model.update(ingredient.__dict__)
