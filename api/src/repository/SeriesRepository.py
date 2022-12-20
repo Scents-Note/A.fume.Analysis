@@ -31,6 +31,17 @@ class SeriesRepository:
         cached_series_idx[name] = series_idx
         return series_idx
 
+    @staticmethod
+    def get_series_by_idx_list(idx_list: [int]) -> str:
+        if len(idx_list) == 0:
+            return ""
+        sql = "SELECT name FROM series WHERE series_idx IN ({})".format(','.join(map(str, idx_list)))
+        result = sql_util.execute(sql=sql)
+        if result is None or len(result) == 0:
+            print(sql)
+            return ""
+        return ','.join(map(lambda x: x['name'], result))
+
 
 def main():
     sql_util.logging = True

@@ -21,7 +21,9 @@ class KeywordRepository:
         return result[0]
 
     @staticmethod
-    def get_keywords_by_idx_list(keyword_idx_list) -> str:
+    def get_keywords_by_idx_list(keyword_idx_list: [int]) -> str:
+        if len(keyword_idx_list) == 0:
+            return ""
         sql = "SELECT name FROM keywords WHERE id IN ({})".format(','.join(map(str, keyword_idx_list)))
         result = sql_util.execute(sql=sql)
         return ','.join(map(lambda x: x['name'], result))
